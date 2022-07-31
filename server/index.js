@@ -2,6 +2,8 @@
 import express from "express";
 import morgan from "morgan";
 
+const { getLandingPage } = require("./handlers");
+
 const PORT = 4000;
 
 const app = express();
@@ -25,6 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use("/", express.static(__dirname + "/"));
 
 // REST endpoints?
-app.get("/bacon", (req, res) => res.status(200).json("🥓"));
+app.get("/", getLandingPage);
+
+// app.get("/bacon", (req, res) => res.status(200).json("🥓"));
 
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
