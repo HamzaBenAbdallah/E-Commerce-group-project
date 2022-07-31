@@ -11,7 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
     "express": "^4.17.1",
+    "mongodb": "^4.8.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

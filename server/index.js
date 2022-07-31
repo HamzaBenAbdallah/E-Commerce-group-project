@@ -4,7 +4,7 @@ import morgan from "morgan";
 
 const PORT = 4000;
 
-app = express();
+const app = express();
 
 app.use(function (req, res, next) {
   res.header(
@@ -22,7 +22,7 @@ app.use(morgan("tiny"));
 app.use(express.static("./server/assets"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use("/", express.static(__dirname + "/"));
+// app.use("/", express.static(__dirname + "/"));
 
 // REST endpoints?
 app.get("/bacon", (req, res) => res.status(200).json("🥓"));
