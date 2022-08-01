@@ -12,8 +12,8 @@ const options = {
 export const getItems = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
-  const db = client.db("ecommerce");
-  const data = await db.collection("items").find().toArray();
+  const ecommerceData = client.db("ecommerce");
+  const itemsData = await ecommerceData.collection("items").find().toArray();
 
   const itemArrToObj = (arrData, idx) => {
     const result = {};
@@ -23,10 +23,21 @@ export const getItems = async (req, res) => {
     return result;
   };
 
-  res.status(200).json({
-    status: 200,
-    items: itemArrToObj(data, "_id"),
-    message: "Success",
-  });
-  client.close();
+  const items = itemArrToObj(itemsData, "_id");
+
+  if (Object.keys(items).length > 0) {
+    return (
+      res.status(200).json({
+        status: 200,
+        items,
+        message: "Success",
+      }),
+      client.close()
+    );
+  } else {
+    return (
+      res.status(404).json({ status: 404, Message: "No items in database" }),
+      client.close()
+    );
+  }
 };
