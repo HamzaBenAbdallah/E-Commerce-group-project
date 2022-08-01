@@ -1,8 +1,7 @@
 "use strict";
 import express from "express";
 import morgan from "morgan";
-
-const { getLandingPage } = require("./handlers");
+import {getItems} from "./handlers.js";
 
 const PORT = 4000;
 
@@ -27,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use("/", express.static(__dirname + "/"));
 
 // REST endpoints?
-app.get("/", getLandingPage);
+app.get("/", getItems);
 
 // app.get("/bacon", (req, res) => res.status(200).json("🥓"));
 
