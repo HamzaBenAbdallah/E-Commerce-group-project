@@ -7,9 +7,12 @@ import Landing from "../pages/Landing";
 import ProductDescription from "../pages/ProductDescription";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
+import GlobalStyles from "../GlobalStyles";
 
 function App() {
   return (
+  <>
+    <GlobalStyles /> 
     <Router>
       <Header />
       <Main>
@@ -22,6 +25,7 @@ function App() {
       </Main>
       <Footer />
     </Router>
+    </>
   );
 }
 
