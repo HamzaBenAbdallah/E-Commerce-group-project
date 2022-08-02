@@ -2,7 +2,8 @@
 import express from "express";
 import morgan from "morgan";
 
-const { getLandingPage } = require("./handlers");
+// const { getLandingPage } = require("./handlers");
+import { getItems, getProductDescription } from "./handlers.js";
 
 const PORT = 4000;
 
@@ -27,7 +28,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use("/", express.static(__dirname + "/"));
 
 // REST endpoints?
-app.get("/", getLandingPage);
+app.get("/get-items", getItems);
+app.get("/products/:product_id", getProductDescription);
 
 // app.get("/bacon", (req, res) => res.status(200).json("🥓"));
 
