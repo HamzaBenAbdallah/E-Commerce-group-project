@@ -2,6 +2,7 @@
 import express from "express";
 import morgan from "morgan";
 import {getItems} from "./handlers.js";
+import { addPurchase , updateQuantity } from "./cartHandlers.js";
 
 const PORT = 4000;
 
@@ -28,6 +29,12 @@ app.use(express.urlencoded({ extended: false }));
 // REST endpoints?
 app.get("/", getItems);
 
+app.post("/purchase" , addPurchase);
+
+app.put("/items/:itemId" , updateQuantity);
+
 // app.get("/bacon", (req, res) => res.status(200).json("🥓"));
 
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
+
+
