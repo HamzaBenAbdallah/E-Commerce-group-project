@@ -10,29 +10,29 @@ import GlobalStyles from "../GlobalStyles";
 
 function App() {
   return (
-  <>
-    <GlobalStyles /> 
-    <Router>
-      <Header />
-      <Main>
-        <Routes>
-          <Route exact path="/" element={<Landing />} />
-          <Route
-            path="/products/:product_id"
-            element={<ProductDescription />}
-          />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-        </Routes>
-      </Main>
-      <Footer />
-    </Router>
+    <>
+      <GlobalStyles />
+      <Router>
+        <Header />
+        <Main>
+          <Routes>
+            <Route exact path="/" element={<Landing />} />
+            <Route
+              path="/products/:product_id"
+              element={<ProductDescription />}
+            />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+          </Routes>
+        </Main>
+        <Footer />
+      </Router>
     </>
   );
 }
 
 const Main = styled.main`
-  background: red;
+  background: gold;
   display: flex;
   flex-direction: column;
   height: 100vh;
