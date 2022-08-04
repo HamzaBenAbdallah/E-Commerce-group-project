@@ -4,8 +4,18 @@ import { createContext, useState, useEffect } from "react";
 export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
-  const [cart, setCart] = useState("");
+  const [cart, setCart] = useState([]);
+
   const [getItems, setGetItems] = useState([]);
+
+  const addProductToCart = (id, event) => {
+    event.preventDefault();
+    let itemsArray = [];
+    itemsArray.push(id);
+    setCart((current) => [...current, ...itemsArray]);
+    console.log("submited to localstorage");
+    localStorage.setItem("cart", JSON.stringify([...cart, ...itemsArray]));
+  };
 
   const checkCart = async () => {
     let cart = await localStorage.getItem("cart");
@@ -21,17 +31,17 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  const addProduct = async (id, cart) => {
-    console.log("this is running");
-    console.log(cart);
-    if (cart.length === 0) {
-      const newItem = [id, 1];
-      // console.log(cart)
-      // let newCart = cart.push(newItem)
-      // console.log(newCart)
-      setCart(cart);
-    }
-  };
+  // const addProduct = async (id, cart) => {
+  //   console.log("this is running");
+  //   console.log(cart);
+  //   if (cart.length === 0) {
+  //     const newItem = [id, 1];
+  //     // console.log(cart)
+  //     // let newCart = cart.push(newItem)
+  //     // console.log(newCart)
+  //     setCart(cart);
+  //   }
+  // };
 
   useEffect(() => {
     fetch("/get-items")
@@ -50,8 +60,8 @@ export const GlobalProvider = ({ children }) => {
       value={{
         cart,
         setCart,
-        addProduct,
         getItems,
+        addProductToCart,
       }}
     >
       {children}

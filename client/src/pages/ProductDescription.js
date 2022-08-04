@@ -6,10 +6,9 @@ import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 
 const ProductDescription = () => {
-  // item id's in cart
-  // const { itemsIdsInCart, setItemsIdsInCart } = useContext(GlobalContext);
-
+  const { cart, setCart, addProductToCart } = useContext(GlobalContext);
   const [productInformation, setProductInformation] = useState();
+  const [itemAddedToCart, setItemAddedToCart] = useState(false);
   let { product_id } = useParams();
   product_id = parseInt(product_id);
 
@@ -18,8 +17,10 @@ const ProductDescription = () => {
       .then((response) => response.json())
       .then((data) => setProductInformation(data.data[0]));
   }, []);
+
   console.log("productInformation", productInformation);
-  console.log("itemsIdsInCart", itemsIdsInCart);
+  console.log("cart", cart);
+
   return (
     <>
       {productInformation ? (
@@ -38,7 +39,9 @@ const ProductDescription = () => {
               <h3 className="price">{productInformation.price}</h3>
             </div>
 
-            <button>Add to cart</button>
+            <button onClick={(event) => addProductToCart(product_id, event)}>
+              Add to cart
+            </button>
           </div>
         </Wrapper>
       ) : (
