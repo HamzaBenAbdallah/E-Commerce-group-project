@@ -12,10 +12,21 @@ const options = {
     useUnifiedTopology: true,
 };
 
+
+
+// ---------- Update the quantity of the items in the cart Handdler-----------------//
 export const updateQuantity = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options);
+    await client.connect();
+    const ecommerceData = client.db("ecommerce");
+    const removeItem = collection('purchases')
 //TO DO
 }
 
+
+
+
+// ---------  Checkout handdler -----------------//
 export const addPurchase = async (req, res) => {
     const client = new MongoClient(MONGO_URI, options);
     console.log(req.body);

@@ -33,6 +33,8 @@ app.post("/purchase" , addPurchase);
 
 app.put("/items/:itemId" , updateQuantity);
 
+// app.delete("/items/:itemId", deleteQuantity);
+
 // app.get("/bacon", (req, res) => res.status(200).json("🥓"));
 
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
