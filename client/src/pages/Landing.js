@@ -94,7 +94,6 @@ const Wrapper = styled.div`
     display: flex;
     margin: 0;
     padding: 0;
-
     & li {
       display: flex;
       border: 2px solid #0000a3;
@@ -107,7 +106,6 @@ const Wrapper = styled.div`
       cursor: pointer;
     }
   }
-
   & div {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -120,14 +118,12 @@ const Wrapper = styled.div`
     justify-items: center;
     padding: 2% 2% 0 2%;
     flex-wrap: wrap;
-
     & section {
       height: 250px;
       width: 100%;
       align-items: center;
       flex-wrap: wrap;
       cursor: pointer;
-
       & img {
         display: grid;
         margin: auto;
@@ -135,7 +131,6 @@ const Wrapper = styled.div`
         align-self: center;
         height: 150px;
       }
-
       & p {
         flex-wrap: wrap;
         justify-content: center;
@@ -147,14 +142,12 @@ const Wrapper = styled.div`
       }
     }
   }
-
   & ol {
     list-style-type: none;
     display: flex;
     justify-content: center;
     gap: 10px;
     grid-area: numberArea;
-
     & li {
       display: inline;
       justify-content: center;
@@ -163,7 +156,6 @@ const Wrapper = styled.div`
       padding: 5px 5px;
       border-radius: 5px;
     }
-
     & li:hover {
       color: white;
       background-color: #0000a3;
