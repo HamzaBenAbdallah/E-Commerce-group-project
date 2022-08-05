@@ -32,7 +32,7 @@ function App() {
 }
 
 const Main = styled.main`
-  background: gold;
+  background: #fff;
   display: flex;
   flex-direction: column;
   height: 100vh;
