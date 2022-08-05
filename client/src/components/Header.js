@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const { cart, setCart } = useContext(GlobalContext);
-  console.log(cart);
+  // console.log(cart);
   // const [itemsInCart, setItemsInCart] = useState(0);
   return (
     <HeaderWrapper>

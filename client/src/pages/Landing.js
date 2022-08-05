@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, Fragment, useState } from "react";
 import styled from "styled-components";
 import { LadingPageContext } from "./LandingPageContext";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
   const {
@@ -12,7 +13,24 @@ const Landing = () => {
     itemCategory,
     categoryPageNumbers,
     handlePageClick,
+    // pageNum,
+    // numberClicked,
   } = useContext(LadingPageContext);
+
+  let navigate = useNavigate();
+
+  const handleRedirection = (e) => {
+    let childElem = e.target.parentNode.getAttribute("id");
+    let parentWrapper = e.target.id;
+    if (childElem !== null || (childElem !== "" && parentWrapper.length < 1)) {
+      navigate(`/products/${childElem}`);
+    } else if (
+      parentWrapper !== null ||
+      (parentWrapper !== "" && childElem.length < 1)
+    ) {
+      navigate(`/products/${parentWrapper}`);
+    }
+  };
 
   return (
     <Wrapper>
@@ -33,37 +51,39 @@ const Landing = () => {
       <div>
         {itemsFromCategory(itemCategory)
           .slice(pageVisits, pageVisits + productsPerPage)
-          .map((item, idx) => {
+          .map((item) => {
             return (
-              <>
-                <summary key={idx}>
-                  {itemCategory === item.category ? (
-                    <section>
-                      <img src={`${item?.imageSrc}`} alt="item_image" />
-                      <p>{item?.name}</p>
-                      <p>{item?.price}</p>
-                    </section>
-                  ) : (
-                    <section key={idx}>
-                      <img src={`${item?.imageSrc}`} alt="item_image" />
-                      <p>{item.name}</p>
-                      <p>{item.price}</p>
-                    </section>
-                  )}
-                </summary>
-                <ol>
-                  {categoryPageNumbers.map((num) => (
-                    <li key={num}>
-                      <button onClick={() => handlePageClick(num)}>
-                        {num + 1}
-                      </button>
-                    </li>
-                  ))}
-                </ol>
-              </>
+              <Fragment key={item.itemID}>
+                {itemCategory === item.category ? (
+                  <section
+                    id={item.itemID}
+                    onClick={(e) => handleRedirection(e)}
+                  >
+                    <img src={`${item?.imageSrc}`} alt="item_image" />
+                    <p>{item?.name}</p>
+                    <p>{item?.price}</p>
+                  </section>
+                ) : (
+                  <section
+                    id={item.itemID}
+                    onClick={(e) => handleRedirection(e)}
+                  >
+                    <img src={`${item?.imageSrc}`} alt="item_image" />
+                    <p>{item.name}</p>
+                    <p>{item.price}</p>
+                  </section>
+                )}
+              </Fragment>
             );
           })}
       </div>
+      <ol>
+        {categoryPageNumbers.map((num) => (
+          <li key={num} onClick={() => handlePageClick(num)}>
+            {num + 1}
+          </li>
+        ))}
+      </ol>
     </Wrapper>
   );
 };
@@ -72,13 +92,12 @@ const Wrapper = styled.div`
   & ul {
     list-style-type: none;
     display: flex;
-    border: 2px solid green;
     margin: 0;
     padding: 0;
 
     & li {
       display: flex;
-      border: 2px solid blue;
+      border: 2px solid #0000a3;
       align-items: center;
       justify-content: space-evenly;
       text-align: center;
@@ -102,36 +121,18 @@ const Wrapper = styled.div`
     padding: 2% 2% 0 2%;
     flex-wrap: wrap;
 
-    & ol {
-      border: 2px solid red;
-      list-style-type: none;
-      border: 10px solid red;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      grid-area: numberArea;
-
-      & li {
-        display: inline;
-        justify-content: center;
-        text-align: center;
-        border: 2px solid blue;
-      }
-    }
-
     & section {
-      /* width: 100%; */
       height: 250px;
-      border: 10px solid pink;
+      width: 100%;
       align-items: center;
       flex-wrap: wrap;
+      cursor: pointer;
 
       & img {
         display: grid;
         margin: auto;
         align-items: center;
         align-self: center;
-        border: 2px solid blue;
         height: 150px;
       }
 
@@ -141,9 +142,31 @@ const Wrapper = styled.div`
         align-items: center;
         align-content: space-evenly;
         text-align: center;
-        border: 2px solid purple;
+        padding-top: 15px;
         margin: 0;
       }
+    }
+  }
+
+  & ol {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    grid-area: numberArea;
+
+    & li {
+      display: inline;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      padding: 5px 5px;
+      border-radius: 5px;
+    }
+
+    & li:hover {
+      color: white;
+      background-color: #0000a3;
     }
   }
 `;

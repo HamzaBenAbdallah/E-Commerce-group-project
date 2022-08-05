@@ -6,6 +6,8 @@ export const LadingPageContext = createContext(null);
 export const LadingPageProvider = ({ children }) => {
   const [itemCategory, setItemCategory] = useState([]);
   const [pageNum, setPageNum] = useState([]);
+  const [numberClicked, setNumberClicked] = useState(false);
+
   const itemData = useContext(GlobalContext);
 
   const { getItems } = itemData;
@@ -49,7 +51,7 @@ export const LadingPageProvider = ({ children }) => {
   );
 
   const handlePageClick = (e) => {
-    setPageNum(e);
+    return setPageNum(e), setNumberClicked(!numberClicked);
   };
 
   let categoryPageNumbers = [];
@@ -70,6 +72,8 @@ export const LadingPageProvider = ({ children }) => {
         productsPerPage,
         itemCategory,
         categoryPageNumbers,
+        numberClicked,
+        pageNum,
         handlePageClick,
       }}
     >
