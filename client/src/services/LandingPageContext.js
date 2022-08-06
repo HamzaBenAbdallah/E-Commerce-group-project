@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from "react";
-import { GlobalContext } from "../services/GlobalContext";
+import { GlobalContext } from "./GlobalContext";
 
 export const LadingPageContext = createContext(null);
 
@@ -12,7 +12,7 @@ export const LadingPageProvider = ({ children }) => {
 
   const { getItems } = itemData;
 
-  const productsPerPage = 12;
+  const productsPerPage = 15;
 
   const pageVisits = pageNum * productsPerPage;
 
