@@ -3,7 +3,7 @@ import styled from "styled-components";
 import GlobalStyles from "../GlobalStyles";
 import Header from "./Header";
 import Front from "../pages/Front";
-import Landing from "../pages/Landing";
+import Products from "../pages/Products";
 import ProductDescription from "../pages/ProductDescription";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
@@ -17,7 +17,7 @@ function App() {
         <Main>
           <Routes>
             <Route exact path="/" element={<Front />} />
-            <Route exact path="/products" element={<Landing />} />
+            <Route exact path="/products" element={<Products />} />
             <Route
               path="/products/:product_id"
               element={<ProductDescription />}

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { LadingPageContext } from "../services/LandingPageContext";
 import Card from "../components/Card";
 
-const Landing = () => {
+const Products = () => {
   const {
     uniqueCategories,
     handleClick,
@@ -109,4 +109,4 @@ const Pagination = styled.ol`
   }
 `;
 
-export default Landing;
+export default Products;
