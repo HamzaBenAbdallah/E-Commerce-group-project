@@ -86,7 +86,7 @@ const Cart = () => {
           <h2>Total: $$$$</h2>
         </TotalContainer>
         <ButtonContainer>
-          {/* <CheckoutButton
+          <CheckoutButton
             Onclick
             on
             button
@@ -114,7 +114,7 @@ const Cart = () => {
             }}
           >
             Update
-          </UpdateButton> */}
+          </UpdateButton>
         </ButtonContainer>
       </CartItemInformationWrapper>
     </CartContent>
