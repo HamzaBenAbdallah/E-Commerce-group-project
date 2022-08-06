@@ -9,10 +9,15 @@ const Header = () => {
   const { cart } = useContext(GlobalContext);
   return (
     <Wrapper>
-      <Link to="/">
-        <Title>Our Super cool Store Name</Title>
-      </Link>
-      <Icons>
+      <Container>
+        <Link to="/">
+          <Title>Our Super cool Store Name</Title>
+        </Link>
+        <Link to="/products">
+          <Item>Products</Item>
+        </Link>
+      </Container>
+      <Container>
         <Icon>
           <Link to="/">
             <MdOutlineAccountCircle size="1.5em" />
@@ -24,7 +29,7 @@ const Header = () => {
             <span>{cart.length}</span>
           </Link>
         </Icon>
-      </Icons>
+      </Container>
     </Wrapper>
   );
 };
@@ -44,12 +49,19 @@ const Link = styled(NavLink)`
 `;
 
 const Title = styled.h1`
-  padding: 0 2rem;
-  font-size: 2rem;
+  padding: 0 6rem 0 2rem;
+  font-size: 2.5em;
 `;
 
-const Icons = styled.div`
+const Container = styled.div`
   display: flex;
+  align-items: center;
+`;
+
+const Item = styled.h3`
+  &:hover {
+    border-bottom: 2px solid #ccc;
+  }
 `;
 
 const Icon = styled.div`

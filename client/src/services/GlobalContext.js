@@ -7,6 +7,7 @@ export const GlobalProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   const [getItems, setGetItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const addProductToCart = (id, event) => {
     event.preventDefault();
@@ -44,11 +45,13 @@ export const GlobalProvider = ({ children }) => {
   // };
 
   useEffect(() => {
+    setIsLoading(true);
     fetch("/get-items")
       .then((res) => res.json())
       .then((itemData) => {
         return setGetItems(itemData.items);
       });
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -62,6 +65,7 @@ export const GlobalProvider = ({ children }) => {
         setCart,
         getItems,
         addProductToCart,
+        isLoading,
       }}
     >
       {children}
