@@ -18,9 +18,6 @@ const ProductDescription = () => {
       .then((data) => setProductInformation(data.data[0]));
   }, []);
 
-  console.log("productInformation", productInformation);
-  console.log("cart", cart);
-
   return (
     <>
       {productInformation ? (

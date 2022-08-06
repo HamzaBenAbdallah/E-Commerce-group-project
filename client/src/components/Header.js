@@ -6,19 +6,44 @@ import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const { cart, setCart } = useContext(GlobalContext);
-  // console.log(cart);
-  // const [itemsInCart, setItemsInCart] = useState(0);
-  return (
-    <HeaderWrapper>
-      <NavLink to="/">
-        <h1>Our Super cool Store Name</h1>
-      </NavLink>
-      <NavLink to="/cart" className="cartDiv">
-        <BsCart size="2em" />
-        <span>{cart.length}</span>
-      </NavLink>
-    </HeaderWrapper>
-  );
+
+  //this is to count how many items are in the cart
+  const initialValue = 0;
+  let itemsInCart;
+  if (cart.length > 0) {
+    itemsInCart = cart
+      .map((item) => Object.values(item)[0])
+      .reduce((a, b) => a + b, initialValue);
+    ////////////
+
+    console.log("itemsInCart", itemsInCart);
+    return (
+      <HeaderWrapper>
+        <NavLink to="/">
+          <h1>Our Super cool Store Name</h1>
+        </NavLink>
+        <NavLink to="/cart" className="cartDiv">
+          <BsCart size="2em" />
+          <span>{itemsInCart}</span>
+        </NavLink>
+      </HeaderWrapper>
+    );
+  }
+
+  //IF there's no items in the cart then the counter is not displayed
+  else {
+    return (
+      <HeaderWrapper>
+        <NavLink to="/">
+          <h1>Our Super cool Store Name</h1>
+        </NavLink>
+        <NavLink to="/cart" className="cartDiv">
+          <BsCart size="2em" />
+          <span></span>
+        </NavLink>
+      </HeaderWrapper>
+    );
+  }
 };
 
 export default Header;

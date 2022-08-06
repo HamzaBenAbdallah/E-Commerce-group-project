@@ -8,13 +8,21 @@ export const GlobalProvider = ({ children }) => {
 
   const [getItems, setGetItems] = useState([]);
 
-  const addProductToCart = (id, event) => {
+  const addProductToCart = async (id, event) => {
     event.preventDefault();
-    let itemsArray = [];
-    itemsArray.push(id);
-    setCart((current) => [...current, ...itemsArray]);
-    console.log("submited to localstorage");
-    localStorage.setItem("cart", JSON.stringify([...cart, ...itemsArray]));
+    let itemsObject = { [id]: 1 };
+    if (cart.filter((item) => item[id]).length > 0) {
+      let indexOfItem = await cart.findIndex((item) => item[id]);
+      setCart([...cart], (cart[indexOfItem][id] += 1));
+      return localStorage.setItem("cart", JSON.stringify([...cart]));
+    } else if (cart.filter((item) => item[id]).length === 0) {
+      console.log("222222");
+      await setCart([...cart, itemsObject]);
+      return localStorage.setItem(
+        "cart",
+        JSON.stringify([...cart, itemsObject])
+      );
+    }
   };
 
   const checkCart = async () => {
@@ -30,18 +38,6 @@ export const GlobalProvider = ({ children }) => {
       return;
     }
   };
-
-  // const addProduct = async (id, cart) => {
-  //   console.log("this is running");
-  //   console.log(cart);
-  //   if (cart.length === 0) {
-  //     const newItem = [id, 1];
-  //     // console.log(cart)
-  //     // let newCart = cart.push(newItem)
-  //     // console.log(newCart)
-  //     setCart(cart);
-  //   }
-  // };
 
   useEffect(() => {
     fetch("/get-items")
