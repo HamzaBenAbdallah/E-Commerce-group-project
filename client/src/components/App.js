@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
+import GlobalStyles from "../GlobalStyles";
 import Header from "./Header";
-import Footer from "./Footer";
+import Front from "../pages/Front";
 import Landing from "../pages/Landing";
 import ProductDescription from "../pages/ProductDescription";
 import Cart from "../pages/Cart";
 import Checkout from "../pages/Checkout";
-import GlobalStyles from "../GlobalStyles";
 
 function App() {
   return (
@@ -16,7 +16,8 @@ function App() {
         <Header />
         <Main>
           <Routes>
-            <Route exact path="/" element={<Landing />} />
+            <Route exact path="/" element={<Front />} />
+            <Route exact path="/products" element={<Landing />} />
             <Route
               path="/products/:product_id"
               element={<ProductDescription />}
