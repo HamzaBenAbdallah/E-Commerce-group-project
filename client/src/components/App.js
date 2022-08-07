@@ -6,6 +6,7 @@ import Front from "../pages/Front";
 import Products from "../pages/Products";
 import ProductDescription from "../pages/ProductDescription";
 import Cart from "../pages/Cart";
+import Confirmation from "../pages/Confirmation";
 import Checkout from "../pages/Checkout";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/confirmation" element={<Confirmation />} />
           </Routes>
         </Main>
       </Router>

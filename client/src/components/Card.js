@@ -1,29 +1,14 @@
-import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const Card = ({ item, itemCategory }) => {
-  // const navigate = useNavigate();
-
-  // const handleRedirection = (e) => {
-  //   let childElem = e.target.parentNode.getAttribute("id");
-  //   let parentWrapper = e.target.id;
-  //   if (childElem !== null || (childElem !== "" && parentWrapper.length < 1)) {
-  //     navigate(`/products/${childElem}`);
-  //   } else if (
-  //     parentWrapper !== null ||
-  //     (parentWrapper !== "" && childElem.length < 1)
-  //   ) {
-  //     navigate(`/products/${parentWrapper}`);
-  //   }
-  // };
-
+const Card = ({ item }) => {
   return (
     <NavLink
+      key={item.itemID}
       id={item.itemID}
       to={`/products/${item.itemID}`}
-      changeOpacity={item?.numInStock ? 0 : 1}
+      opacity={item?.numInStock ? 0 : 1}
       quantity={item?.numInStock ? 0 : 1}
-      // onClick={handleRedirection}
     >
       <Leftover>
         {item?.numInStock > 0 && item?.numInStock < 4 && (
@@ -62,7 +47,7 @@ const NavLink = styled(Link)`
   line-height: 1.25rem;
   font-family: sans-serif;
   transition: transform 0.25s ease-in-out;
-  opacity: ${(props) => (props.changeOpacity ? 0.2 : 1)};
+  opacity: ${(props) => (props.opacity ? 0.2 : 1)};
   pointer-events: ${(props) => (props.quantity ? "none" : "")};
 
   &:hover {

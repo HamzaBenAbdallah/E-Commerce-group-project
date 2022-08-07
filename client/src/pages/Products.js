@@ -13,8 +13,6 @@ const Products = () => {
     itemCategory,
     categoryPageNumbers,
     handlePageClick,
-    // pageNum,
-    // numberClicked,
   } = useContext(LadingPageContext);
 
   return (

@@ -1,12 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
+import { LadingPageContext } from "../services/LandingPageContext";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
-
 const Front = () => {
-  const { isLoading, getItems } = useContext(GlobalContext);
-  const items = Object.values(getItems).slice(0, 5);
+  const { isLoading } = useContext(GlobalContext);
+  const { productsInStock } = useContext(LadingPageContext);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -21,9 +21,9 @@ const Front = () => {
       <Info>
         <Title>Featured Products</Title>
         <Featured>
-          {items?.map((item) => (
-            <Card key={item.id} item={item} />
-          ))}
+          {productsInStock.slice(0, 5).map((item) => {
+            return <Card key={item.itemID} item={item} />;
+          })}
         </Featured>
         <Link to="/products">
           <Button>Browse all products</Button>
