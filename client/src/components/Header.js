@@ -1,15 +1,16 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { LandingPageContext } from "../services/LandingPageContext";
-
 import styled from "styled-components";
 
 const Header = () => {
-<<<<<<< Updated upstream
   const { cart, setCart } = useContext(GlobalContext);
+
+  const { uniqueCategories, itemCategory, handleClick } =
+    useContext(LandingPageContext);
 
   // this is to count how many items are in the cart
   const initialValue = 0;
@@ -21,20 +22,15 @@ const Header = () => {
   }
   ////////////
 
-=======
-  const { uniqueCategories, itemCategory, handleClick } =
-    useContext(LandingPageContext);
-
-  const { cart } = useContext(GlobalContext);
-
-  console.log(itemCategory);
->>>>>>> Stashed changes
   return (
     <Wrapper>
       <Container>
         <Link to="/">
           <Title>Our Super cool Store Name</Title>
         </Link>
+        {/* <Link to="/products">
+          <Item>Products</Item>
+        </Link> */}
         <Menu>
           <Item>Products</Item>
 
@@ -73,6 +69,12 @@ const Header = () => {
 };
 
 const Wrapper = styled.div`
+  /* display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: sans-serif;
+  border-bottom: 2px solid #ccc; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -98,6 +100,9 @@ const Container = styled.div`
 `;
 
 const Item = styled.h3`
+  /* &:hover {
+    border-bottom: 2px solid #ccc;
+  } */
   font-size: 1.2rem;
   cursor: pointer;
   border-bottom: 2px solid white;
@@ -152,5 +157,4 @@ const Menu = styled.div`
     }
   }
 `;
-
 export default Header;
