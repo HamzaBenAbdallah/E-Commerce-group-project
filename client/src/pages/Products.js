@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { LadingPageContext } from "../services/LandingPageContext";
+import { LandingPageContext } from "../services/LandingPageContext";
 import Card from "../components/Card";
+import Pagination from "./Pagination";
 
 const Products = () => {
   const {
@@ -13,7 +14,7 @@ const Products = () => {
     itemCategory,
     categoryPageNumbers,
     handlePageClick,
-  } = useContext(LadingPageContext);
+  } = useContext(LandingPageContext);
 
   return (
     <Wrapper>
@@ -35,18 +36,17 @@ const Products = () => {
         {itemsFromCategory(itemCategory)
           .slice(pageVisits, pageVisits + productsPerPage)
           .map((item) => {
-            return (
-              <Card key={item.itemID} item={item} itemCategory={itemCategory} />
-            );
+            return <Card key={item.itemID} item={item} />;
           })}
       </CardGrid>
-      <Pagination>
+      <Pagination />
+      {/* <Paginate>
         {categoryPageNumbers.map((num) => (
           <li key={num} onClick={() => handlePageClick(num)}>
             {num + 1}
           </li>
         ))}
-      </Pagination>
+      </Paginate> */}
     </Wrapper>
   );
 };
@@ -87,7 +87,7 @@ const CardGrid = styled.div`
   margin-top: 2rem;
 `;
 
-const Pagination = styled.ol`
+const Paginate = styled.ol`
   list-style-type: none;
   display: flex;
   justify-content: center;
