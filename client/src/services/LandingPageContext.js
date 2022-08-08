@@ -1,18 +1,17 @@
 import React, { createContext, useState, useContext } from "react";
 import { GlobalContext } from "./GlobalContext";
-import Card from "../components/Card";
-export const LadingPageContext = createContext(null);
+export const LandingPageContext = createContext(null);
 
-export const LadingPageProvider = ({ children }) => {
+export const LandingPageProvider = ({ children }) => {
   const [itemCategory, setItemCategory] = useState([]);
-  const [pageNum, setPageNum] = useState([]);
+  const [pageNum, setPageNum] = useState([]); //currentPage
   const [numberClicked, setNumberClicked] = useState(false);
 
   const itemData = useContext(GlobalContext);
 
   const { getItems } = itemData;
 
-  const productsPerPage = 15;
+  const productsPerPage = 15; // pageSize
 
   const pageVisits = pageNum * productsPerPage;
 
@@ -71,7 +70,7 @@ export const LadingPageProvider = ({ children }) => {
   });
 
   return (
-    <LadingPageContext.Provider
+    <LandingPageContext.Provider
       value={{
         uniqueCategories,
         handleClick,
@@ -87,6 +86,6 @@ export const LadingPageProvider = ({ children }) => {
       }}
     >
       {children}
-    </LadingPageContext.Provider>
+    </LandingPageContext.Provider>
   );
 };

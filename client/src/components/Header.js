@@ -1,11 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdOutlineAccountCircle } from "react-icons/md";
+import { LandingPageContext } from "../services/LandingPageContext";
+
 import styled from "styled-components";
 
 const Header = () => {
+<<<<<<< Updated upstream
   const { cart, setCart } = useContext(GlobalContext);
 
   // this is to count how many items are in the cart
@@ -18,15 +21,39 @@ const Header = () => {
   }
   ////////////
 
+=======
+  const { uniqueCategories, itemCategory, handleClick } =
+    useContext(LandingPageContext);
+
+  const { cart } = useContext(GlobalContext);
+
+  console.log(itemCategory);
+>>>>>>> Stashed changes
   return (
     <Wrapper>
       <Container>
         <Link to="/">
           <Title>Our Super cool Store Name</Title>
         </Link>
-        <Link to="/products">
+        <Menu>
           <Item>Products</Item>
-        </Link>
+
+          <ol>
+            {uniqueCategories.map((clickedCategory, idx) => {
+              return (
+                <Link to="/products" key={idx}>
+                  <li
+                    onClick={() => {
+                      handleClick(clickedCategory);
+                    }}
+                  >
+                    {clickedCategory}
+                  </li>
+                </Link>
+              );
+            })}
+          </ol>
+        </Menu>
       </Container>
       <Container>
         <Icon>
@@ -52,6 +79,7 @@ const Wrapper = styled.div`
   align-items: center;
   font-family: sans-serif;
   border-bottom: 2px solid #ccc;
+  --height: 80px;
 `;
 
 const Link = styled(NavLink)`
@@ -70,9 +98,13 @@ const Container = styled.div`
 `;
 
 const Item = styled.h3`
-  &:hover {
-    border-bottom: 2px solid #ccc;
-  }
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-bottom: 2px solid white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: var(--height);
 `;
 
 const Icon = styled.div`
@@ -82,6 +114,43 @@ const Icon = styled.div`
   justify-content: center;
   align-items: center;
   border-left: 2px solid #ccc;
+`;
+
+const Menu = styled.div`
+  &:hover,
+  ${Item}:hover {
+    text-decoration: underline;
+    text-decoration-color: #ccc;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 10px;
+  }
+
+  ol {
+    position: absolute;
+    border: 2px solid #ccc;
+    background-color: white;
+    width: 180px;
+    margin: 0;
+    cursor: pointer;
+    display: none;
+
+    li {
+      background-color: white;
+      padding: 12px 17px;
+
+      &:hover {
+        background-color: #ccc;
+        font-weight: bolder;
+      }
+    }
+  }
+
+  &:hover,
+  ol:hover {
+    ol {
+      display: block;
+    }
+  }
 `;
 
 export default Header;

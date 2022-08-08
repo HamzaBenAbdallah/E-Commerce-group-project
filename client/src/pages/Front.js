@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
-import { LadingPageContext } from "../services/LandingPageContext";
+import { LandingPageContext } from "../services/LandingPageContext";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
 const Front = () => {
   const { isLoading } = useContext(GlobalContext);
-  const { productsInStock } = useContext(LadingPageContext);
+  const { productsInStock } = useContext(LandingPageContext);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
