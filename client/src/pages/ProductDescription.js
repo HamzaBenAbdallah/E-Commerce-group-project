@@ -8,7 +8,8 @@ import { GlobalContext } from "../services/GlobalContext";
 const ProductDescription = () => {
   const { cart, setCart, addProductToCart } = useContext(GlobalContext);
   const [productInformation, setProductInformation] = useState();
-  const [itemAddedToCart, setItemAddedToCart] = useState(false);
+  const [quantityToAdd, setQuantityToAdd] = useState(1);
+
   let { product_id } = useParams();
   product_id = parseInt(product_id);
 
@@ -16,10 +17,9 @@ const ProductDescription = () => {
     fetch(`/products/${product_id}`)
       .then((response) => response.json())
       .then((data) => setProductInformation(data.data[0]));
-  }, []);
+  }, [cart]);
 
   console.log("productInformation", productInformation);
-  console.log("cart", cart);
 
   return (
     <>
@@ -39,7 +39,45 @@ const ProductDescription = () => {
               <h3 className="price">{productInformation.price}</h3>
             </div>
 
-            <button onClick={(event) => addProductToCart(product_id, event)}>
+            <div className="quantity-selector">
+              {quantityToAdd <= 1 ? (
+                <button
+                  disabled
+                  onClick={() =>
+                    setQuantityToAdd(
+                      (prevQuantityToAdd) => prevQuantityToAdd - 1
+                    )
+                  }
+                >
+                  -
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    setQuantityToAdd(
+                      (prevQuantityToAdd) => prevQuantityToAdd - 1
+                    )
+                  }
+                >
+                  -
+                </button>
+              )}
+              <span>{quantityToAdd}</span>
+
+              <button
+                onClick={() =>
+                  setQuantityToAdd((prevQuantityToAdd) => prevQuantityToAdd + 1)
+                }
+              >
+                +
+              </button>
+            </div>
+
+            <button
+              onClick={(event) =>
+                addProductToCart(product_id, event, quantityToAdd)
+              }
+            >
               Add to cart
             </button>
           </div>
@@ -63,23 +101,25 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   border: solid 1px black;
+
   button {
-  width: 100%;
-  background-color: red;
-  border: none;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-}
+    width: 100%;
+    border: none;
+    padding: 10px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .quantity-selector button {
+    width: 30px;
   }
 
   .imageWrapper {
-
     margin: 50px;
     width: 400px;
     height: 320px;
@@ -97,7 +137,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     width: 400px;
-    height: 320px;
+    height: 380px;
     border-radius: 5px;
     .productId {
       margin: 0;
@@ -116,7 +156,7 @@ const Wrapper = styled.div`
     }
   }
   .infoWrapper > * {
-    background-color: aliceblue;
+    background-color: #efefef;
   }
 
   .productInfoDiv {
@@ -124,6 +164,18 @@ const Wrapper = styled.div`
     margin: 5px;
     border-radius: 5px;
     padding: 5px;
+
+    h2 {
+      margin: 10px 0 10px 0;
+    }
+  }
+
+  .quantity-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px 0 38px 0;
   }
 
   .pricing_stock {

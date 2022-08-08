@@ -6,7 +6,18 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import styled from "styled-components";
 
 const Header = () => {
-  const { cart } = useContext(GlobalContext);
+  const { cart, setCart } = useContext(GlobalContext);
+
+  // this is to count how many items are in the cart
+  const initialValue = 0;
+  let itemsInCart;
+  if (cart.length > 0) {
+    itemsInCart = cart
+      .map((item) => Object.values(item)[0])
+      .reduce((a, b) => a + b, initialValue);
+  }
+  ////////////
+
   return (
     <Wrapper>
       <Container>
@@ -26,7 +37,7 @@ const Header = () => {
         <Icon>
           <Link to="/cart">
             <AiOutlineShoppingCart size="1.5em" />
-            <span>{cart.length}</span>
+            <span>{itemsInCart}</span>
           </Link>
         </Icon>
       </Container>
