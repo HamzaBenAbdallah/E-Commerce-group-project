@@ -1,21 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
+import { GlobalContext } from "../services/GlobalContext";
 
 const ItemsInCart = ({ currentItem, index, id }) => {
+  const { cart, setCart, removeItemFromCart, updateQuantityOfItemsInCart } =
+    useContext(GlobalContext);
   const [itemInformation, setItemInformation] = useState();
 
   useEffect(() => {
     fetch(`/products/${id}`)
       .then((response) => response.json())
       .then((data) => setItemInformation(data.data[0]));
-  }, []);
-
-  console.log(currentItem, index, id);
-  console.log("ZAZAZAZA", itemInformation);
+  }, [cart]);
 
   if (itemInformation) {
     let price = Number(itemInformation.price.substring(1));
-    console.log(price);
+    let quantity = currentItem[id];
+    // price = price.toFixed(2);
+
     return (
       <tr>
         <td>
@@ -31,21 +33,35 @@ const ItemsInCart = ({ currentItem, index, id }) => {
           <span>{itemInformation.price}</span>
         </td>
         <td>
-          {" "}
-          <span className="quantity">{currentItem[id]}</span>
+          {/* <span className="quantity">{Math.floor(Number(quantity))}</span> */}
+          <input
+            type="number"
+            inputMode="numeric"
+            value={Math.floor(Number(currentItem[id]))}
+            placeholder={Math.floor(Number(currentItem[id]))}
+            onChange={(event) => {
+              updateQuantityOfItemsInCart(event, itemInformation._id);
+            }}
+          ></input>
         </td>
         <td>
           {" "}
-          <button>Remove</button>
+          <button
+            onClick={(event) => {
+              removeItemFromCart(event, itemInformation._id);
+            }}
+          >
+            Remove
+          </button>
         </td>
         <td>
           {" "}
-          <span>{price * currentItem[id]}</span>
+          <span>{Number((price * quantity).toFixed(2))}</span>
         </td>
       </tr>
     );
   } else {
-    return <ProductWrapper>Loading</ProductWrapper>;
+    return <>Loading</>;
   }
 };
 

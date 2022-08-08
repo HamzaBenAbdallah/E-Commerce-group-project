@@ -9,12 +9,14 @@ export const GlobalProvider = ({ children }) => {
   const [getItems, setGetItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const addProductToCart = async (id, event) => {
+  const addProductToCart = async (id, event, quantityToAdd) => {
     event.preventDefault();
-    let itemsObject = { [id]: 1 };
+    console.log("quantityToAdd", quantityToAdd);
+    let itemsObject = { [id]: quantityToAdd };
     if (cart.filter((item) => item[id]).length > 0) {
       let indexOfItem = await cart.findIndex((item) => item[id]);
-      setCart([...cart], (cart[indexOfItem][id] += 1));
+      setCart([...cart], (cart[indexOfItem][id] += quantityToAdd));
+      console.log("cart", cart);
       return localStorage.setItem("cart", JSON.stringify([...cart]));
     } else if (cart.filter((item) => item[id]).length === 0) {
       console.log("222222");
@@ -24,6 +26,26 @@ export const GlobalProvider = ({ children }) => {
         JSON.stringify([...cart, itemsObject])
       );
     }
+  };
+
+  const removeItemFromCart = (event, _id) => {
+    event.preventDefault();
+    const newArrayWithoutSelectedId = cart.filter((object) => !object[_id]);
+    setCart([...newArrayWithoutSelectedId]);
+    return localStorage.setItem(
+      "cart",
+      JSON.stringify([...newArrayWithoutSelectedId])
+    );
+  };
+
+  const updateQuantityOfItemsInCart = (event, _id) => {
+    event.preventDefault();
+    let indexOfItem = cart.findIndex((elem) => elem[_id]);
+    setCart([...cart], (cart[indexOfItem][_id] = parseInt(event.target.value)));
+    console.log("indexOfItem", indexOfItem);
+    console.log("_id", _id);
+
+    return localStorage.setItem("cart", JSON.stringify([...cart]));
   };
 
   const checkCart = async () => {
@@ -54,6 +76,8 @@ export const GlobalProvider = ({ children }) => {
     checkCart();
   }, []);
 
+  console.log("cart", cart);
+
   return (
     <GlobalContext.Provider
       value={{
@@ -62,6 +86,8 @@ export const GlobalProvider = ({ children }) => {
         getItems,
         addProductToCart,
         isLoading,
+        removeItemFromCart,
+        updateQuantityOfItemsInCart,
       }}
     >
       {children}
