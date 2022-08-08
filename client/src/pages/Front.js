@@ -1,12 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
+import { LadingPageContext } from "../services/LandingPageContext";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
-
 const Front = () => {
-  const { isLoading, getItems } = useContext(GlobalContext);
-  const items = Object.values(getItems).slice(0, 5);
+  const { isLoading } = useContext(GlobalContext);
+  const { productsInStock } = useContext(LadingPageContext);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -15,15 +15,15 @@ const Front = () => {
   return (
     <Wrapper>
       <Image
-        src="https://images.unsplash.com/photo-1629934266257-69467879efa7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80"
+        src="https://images.unsplash.com/photo-1568454537842-d933259bb258?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80"
         alt=""
       />
       <Info>
         <Title>Featured Products</Title>
         <Featured>
-          {items?.map((item) => (
-            <Card key={item.id} item={item} />
-          ))}
+          {productsInStock.slice(0, 5).map((item) => {
+            return <Card key={item.itemID} item={item} />;
+          })}
         </Featured>
         <Link to="/products">
           <Button>Browse all products</Button>
@@ -40,10 +40,11 @@ const Wrapper = styled.div`
   margin: 2rem 0;
   font-family: sans-serif;
   gap: 2rem;
+  height: 100vh;
 `;
 
 const Image = styled.img`
-  height: 60%;
+  height: 75%;
   object-fit: cover;
 `;
 

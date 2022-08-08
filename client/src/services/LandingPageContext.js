@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from "react";
 import { GlobalContext } from "./GlobalContext";
-
+import Card from "../components/Card";
 export const LadingPageContext = createContext(null);
 
 export const LadingPageProvider = ({ children }) => {
@@ -62,6 +62,14 @@ export const LadingPageProvider = ({ children }) => {
     }
   });
 
+  const productsInStock = itemsFromCategory(itemCategory).filter((item) => {
+    if (item.numInStock > 3) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+
   return (
     <LadingPageContext.Provider
       value={{
@@ -75,6 +83,7 @@ export const LadingPageProvider = ({ children }) => {
         numberClicked,
         pageNum,
         handlePageClick,
+        productsInStock,
       }}
     >
       {children}

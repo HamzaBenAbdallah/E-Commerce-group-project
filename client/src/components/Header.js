@@ -5,47 +5,18 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import styled from "styled-components";
 
-
 const Header = () => {
   const { cart, setCart } = useContext(GlobalContext);
 
-  //this is to count how many items are in the cart
+  // this is to count how many items are in the cart
   const initialValue = 0;
   let itemsInCart;
   if (cart.length > 0) {
     itemsInCart = cart
       .map((item) => Object.values(item)[0])
       .reduce((a, b) => a + b, initialValue);
-    ////////////
-
-    console.log("itemsInCart", itemsInCart);
-  //   return (
-  //     <HeaderWrapper>
-  //       <NavLink to="/">
-  //         <h1>Our Super cool Store Name</h1>
-  //       </NavLink>
-  //       <NavLink to="/cart" className="cartDiv">
-  //         <BsCart size="2em" />
-  //         <span>{itemsInCart}</span>
-  //       </NavLink>
-  //     </HeaderWrapper>
-  //   );
-  // }
-
-  // //IF there's no items in the cart then the counter is not displayed
-  // else {
-  //   return (
-  //     <HeaderWrapper>
-  //       <NavLink to="/">
-  //         <h1>Our Super cool Store Name</h1>
-  //       </NavLink>
-  //       <NavLink to="/cart" className="cartDiv">
-  //         <BsCart size="2em" />
-  //         <span></span>
-  //       </NavLink>
-  //     </HeaderWrapper>
-  //   );
-  // }
+  }
+  ////////////
 
   return (
     <Wrapper>
@@ -66,7 +37,7 @@ const Header = () => {
         <Icon>
           <Link to="/cart">
             <AiOutlineShoppingCart size="1.5em" />
-            <span>{cart.length}</span>
+            <span>{itemsInCart}</span>
           </Link>
         </Icon>
       </Container>
@@ -113,4 +84,4 @@ const Icon = styled.div`
   border-left: 2px solid #ccc;
 `;
 
-export default Header
+export default Header;
