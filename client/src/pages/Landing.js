@@ -1,7 +1,7 @@
-import React, { useContext, Fragment, useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { LadingPageContext } from "./LandingPageContext";
-import { useNavigate } from "react-router-dom";
+import { LadingPageContext } from "../services/LandingPageContext";
+import Card from "../components/Card";
 
 const Landing = () => {
   const {
@@ -17,24 +17,9 @@ const Landing = () => {
     // numberClicked,
   } = useContext(LadingPageContext);
 
-  let navigate = useNavigate();
-
-  const handleRedirection = (e) => {
-    let childElem = e.target.parentNode.getAttribute("id");
-    let parentWrapper = e.target.id;
-    if (childElem !== null || (childElem !== "" && parentWrapper.length < 1)) {
-      navigate(`/products/${childElem}`);
-    } else if (
-      parentWrapper !== null ||
-      (parentWrapper !== "" && childElem.length < 1)
-    ) {
-      navigate(`/products/${parentWrapper}`);
-    }
-  };
-
   return (
     <Wrapper>
-      <ul>
+      <Categories>
         {uniqueCategories.map((itemCategories, idx) => {
           return (
             <li
@@ -47,119 +32,80 @@ const Landing = () => {
             </li>
           );
         })}
-      </ul>
-      <div>
+      </Categories>
+      <CardGrid>
         {itemsFromCategory(itemCategory)
           .slice(pageVisits, pageVisits + productsPerPage)
           .map((item) => {
             return (
-              <Fragment key={item.itemID}>
-                {itemCategory === item.category ? (
-                  <section
-                    id={item.itemID}
-                    onClick={(e) => handleRedirection(e)}
-                  >
-                    <img src={`${item?.imageSrc}`} alt="item_image" />
-                    <p>{item?.name}</p>
-                    <p>{item?.price}</p>
-                  </section>
-                ) : (
-                  <section
-                    id={item.itemID}
-                    onClick={(e) => handleRedirection(e)}
-                  >
-                    <img src={`${item?.imageSrc}`} alt="item_image" />
-                    <p>{item.name}</p>
-                    <p>{item.price}</p>
-                  </section>
-                )}
-              </Fragment>
+              <Card key={item.itemID} item={item} itemCategory={itemCategory} />
             );
           })}
-      </div>
-      <ol>
+      </CardGrid>
+      <Pagination>
         {categoryPageNumbers.map((num) => (
           <li key={num} onClick={() => handlePageClick(num)}>
             {num + 1}
           </li>
         ))}
-      </ol>
+      </Pagination>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  & ul {
-    list-style-type: none;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+`;
+
+const Categories = styled.ul`
+  width: 100%;
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  li {
     display: flex;
-    margin: 0;
-    padding: 0;
-    & li {
-      display: flex;
-      border: 2px solid #0000a3;
-      align-items: center;
-      justify-content: space-evenly;
-      text-align: center;
-      width: 100%;
-      flex-wrap: wrap;
-      height: 35px;
-      cursor: pointer;
-    }
+    border: 2px solid #0000a3;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+    width: 100%;
+    height: 35px;
+    cursor: pointer;
   }
-  & div {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-areas:
-      ". . . ."
-      ". . . ."
-      ". . . ."
-      ". numberArea numberArea .";
-    gap: 20px 50px;
-    justify-items: center;
-    padding: 2% 2% 0 2%;
-    flex-wrap: wrap;
-    & section {
-      height: 250px;
-      width: 100%;
-      align-items: center;
-      flex-wrap: wrap;
-      cursor: pointer;
-      & img {
-        display: grid;
-        margin: auto;
-        align-items: center;
-        align-self: center;
-        height: 150px;
-      }
-      & p {
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        align-content: space-evenly;
-        text-align: center;
-        padding-top: 15px;
-        margin: 0;
-      }
-    }
-  }
-  & ol {
-    list-style-type: none;
-    display: flex;
+`;
+
+const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  width: 80%;
+  margin-top: 2rem;
+`;
+
+const Pagination = styled.ol`
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+
+  li {
+    display: inline;
     justify-content: center;
-    gap: 10px;
-    grid-area: numberArea;
-    & li {
-      display: inline;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-      padding: 5px 5px;
-      border-radius: 5px;
-    }
-    & li:hover {
-      color: white;
-      background-color: #0000a3;
-    }
+    text-align: center;
+    cursor: pointer;
+    padding: 5px 5px;
+    border-radius: 5px;
+  }
+  li:hover {
+    color: white;
+    background-color: #0000a3;
   }
 `;
 

@@ -2,7 +2,6 @@
 import express from "express";
 import morgan from "morgan";
 import { getItems, getProductDescription } from "./handlers.js";
-import { addPurchase, updateQuantity } from "./cartHandlers.js";
 
 const PORT = 4000;
 
@@ -30,10 +29,9 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/get-items", getItems);
 app.get("/products/:product_id", getProductDescription);
 
-app.post("/purchase", addPurchase);
-
-app.put("/items/:itemId", updateQuantity);
-
+//cart endpoints//
+// app.post("/purchase", addPurchase);
+// app.put("/items/:itemId", updateQuantity);
 // app.delete("/items/:itemId", deleteQuantity);
 
 // app.get("/bacon", (req, res) => res.status(200).json("🥓"));
