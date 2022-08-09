@@ -9,8 +9,7 @@ import styled from "styled-components";
 const Header = () => {
   const { cart, setCart } = useContext(GlobalContext);
 
-  const { uniqueCategories, itemCategory, handleClick } =
-    useContext(LandingPageContext);
+  const { uniqueCategories, handleClick } = useContext(LandingPageContext);
 
   // this is to count how many items are in the cart
   const initialValue = 0;
@@ -20,7 +19,6 @@ const Header = () => {
       .map((item) => Object.values(item)[0])
       .reduce((a, b) => a + b, initialValue);
   }
-  ////////////
 
   return (
     <Wrapper>
@@ -28,12 +26,16 @@ const Header = () => {
         <Link to="/">
           <Title>Our Super cool Store Name</Title>
         </Link>
-        {/* <Link to="/products">
-          <Item>Products</Item>
-        </Link> */}
         <Menu>
-          <Item>Products</Item>
-
+          <Link to="/products">
+            <Item
+              onClick={() => {
+                handleClick("");
+              }}
+            >
+              Products
+            </Item>
+          </Link>
           <ol>
             {uniqueCategories.map((clickedCategory, idx) => {
               return (
@@ -69,12 +71,6 @@ const Header = () => {
 };
 
 const Wrapper = styled.div`
-  /* display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-family: sans-serif;
-  border-bottom: 2px solid #ccc; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -100,9 +96,6 @@ const Container = styled.div`
 `;
 
 const Item = styled.h3`
-  /* &:hover {
-    border-bottom: 2px solid #ccc;
-  } */
   font-size: 1.2rem;
   cursor: pointer;
   border-bottom: 2px solid white;

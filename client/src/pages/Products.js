@@ -12,41 +12,36 @@ const Products = () => {
     pageVisits,
     productsPerPage,
     itemCategory,
-    categoryPageNumbers,
-    handlePageClick,
+    pageNum,
   } = useContext(LandingPageContext);
+
+  console.log(`pageNum:`, pageNum);
 
   return (
     <Wrapper>
-      <Categories>
-        {uniqueCategories.map((itemCategories, idx) => {
-          return (
-            <li
-              key={idx}
-              onClick={() => {
-                handleClick(itemCategories);
-              }}
-            >
-              {itemCategories}
-            </li>
-          );
-        })}
-      </Categories>
       <CardGrid>
+        <Categories>
+          {uniqueCategories.map((itemCategories, idx) => {
+            return (
+              <li
+                key={idx}
+                onClick={() => {
+                  handleClick(itemCategories);
+                }}
+              >
+                {itemCategories}
+              </li>
+            );
+          })}
+        </Categories>
         {itemsFromCategory(itemCategory)
           .slice(pageVisits, pageVisits + productsPerPage)
           .map((item) => {
             return <Card key={item.itemID} item={item} />;
           })}
+        {/* add filter brand(companyID), body location, price, categories*/}
       </CardGrid>
       <Pagination />
-      {/* <Paginate>
-        {categoryPageNumbers.map((num) => (
-          <li key={num} onClick={() => handlePageClick(num)}>
-            {num + 1}
-          </li>
-        ))}
-      </Paginate> */}
     </Wrapper>
   );
 };
@@ -63,9 +58,11 @@ const Wrapper = styled.div`
 const Categories = styled.ul`
   width: 100%;
   display: flex;
+  flex-direction: column;
   list-style-type: none;
-  margin: 0;
-  padding: 0;
+  /* margin: 0;
+  padding: 0; */
+  grid-area: Menu;
 
   li {
     display: flex;
@@ -81,30 +78,15 @@ const Categories = styled.ul`
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  width: 80%;
+  grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "Menu . . . ."
+    "Menu . . . ."
+    "Menu . . . ."
+    "Menu . . . .";
+  gap: 30px;
+  padding: 0 6% 0 1%;
   margin-top: 2rem;
-`;
-
-const Paginate = styled.ol`
-  list-style-type: none;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-
-  li {
-    display: inline;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px 5px;
-    border-radius: 5px;
-  }
-  li:hover {
-    color: white;
-    background-color: #0000a3;
-  }
 `;
 
 export default Products;
