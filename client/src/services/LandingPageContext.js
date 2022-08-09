@@ -11,7 +11,7 @@ export const LandingPageProvider = ({ children }) => {
 
   const { getItems } = itemData;
 
-  const productsPerPage = 15; // pageSize
+  const productsPerPage = 12; // pageSize
 
   const pageVisits = pageNum * productsPerPage;
 
@@ -23,7 +23,15 @@ export const LandingPageProvider = ({ children }) => {
   const categories = objToArray.map((items) => {
     return items.category;
   });
-  categories.unshift("All Products");
+
+  const bodyLocation = objToArray.map((items) => {
+    return items.body_location;
+  });
+
+  const uniqueBodyLocation = [...new Set(bodyLocation)];
+  console.log(`uniqueBodyLocation:`, uniqueBodyLocation);
+
+  // categories.unshift("All Products");
 
   const uniqueCategories = [...new Set(categories)];
 
@@ -33,15 +41,17 @@ export const LandingPageProvider = ({ children }) => {
         return true;
       } else if (productCategory < 1) {
         return true;
-      } else if (productCategory === "All Products") {
-        return true;
       }
+      // else if (productCategory === "All Products") {
+      //   return true;
+      // }
     });
   };
 
   const handleClick = (event) => {
     if (event !== itemCategory) {
-      return setPageNum(0), setItemCategory(event);
+      setPageNum(0);
+      setItemCategory(event);
     }
   };
 
@@ -50,7 +60,8 @@ export const LandingPageProvider = ({ children }) => {
   );
 
   const handlePageClick = (e) => {
-    return setPageNum(e), setNumberClicked(!numberClicked);
+    setPageNum(e);
+    setNumberClicked(!numberClicked);
   };
 
   let categoryPageNumbers = [];
@@ -61,7 +72,7 @@ export const LandingPageProvider = ({ children }) => {
     }
   });
 
-  const productsInStock = itemsFromCategory(itemCategory).filter((item) => {
+  const productsInStock = itemsFromCategory("").filter((item) => {
     if (item.numInStock > 3) {
       return true;
     } else {
@@ -82,6 +93,7 @@ export const LandingPageProvider = ({ children }) => {
         numberClicked,
         pageNum,
         handlePageClick,
+
         productsInStock,
       }}
     >

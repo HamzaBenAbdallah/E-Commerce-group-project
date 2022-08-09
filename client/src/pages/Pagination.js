@@ -4,58 +4,68 @@ import { LandingPageContext } from "../services/LandingPageContext";
 import ReactPaginate from "react-paginate";
 
 const Pagination = () => {
-  const { categoryPageNumbers, handlePageClick, numPages, pageNum } =
+  const { categoryPageNumbers, handlePageClick, pageNum } =
     useContext(LandingPageContext);
-  //   const [currentPageNum, setCurrentPageNum] = useState(0);
 
-  console.log(`categoryPageNumbers:`, categoryPageNumbers);
-
-  //   const changePage = ({ selected }) => {
-  //     setCurrentPageNum(selected);
-  //   };
+  const [selectedNum, setSelectedNum] = useState();
 
   const getLastIdx = categoryPageNumbers.at(-1) + 1;
 
+  const handlePageUpdate = (event) => {
+    setSelectedNum(event.selected);
+    handlePageClick(event.selected);
+  };
+
+  // console.log(`selectedNum:`, selectedNum);
+  // console.log(`pageNum:`, pageNum);
+
   return (
-    <Paginate>
+    <Paginate sameNum={pageNum === selectedNum}>
       <ReactPaginate
-        previousLabel={"Previous"}
-        nextLabel={"Next"}
+        previousLabel="< Previous"
+        nextLabel="Next >"
         pageCount={getLastIdx}
-        onPageChange={getLastIdx}
-        containerClassName={"paginationBtn"}
-        previousLinkClassName={"previousBtn"}
-        nextLinkClassName={"nextBtn"}
-        disabledClassName={"paginationDisabled"}
-        activeClassName={"paginationActive"}
+        onPageChange={handlePageUpdate}
+        pageRangeDisplayed={3}
+        className={"paginateStyle"}
+        marginPagesDisplayed={1}
       />
-      {/* {categoryPageNumbers.slice(0, 5).map((num) => (
-        <li key={num} onClick={() => handlePageClick(num)}>
-          {num + 1}
-        </li>
-      ))} */}
     </Paginate>
   );
 };
 
 export default Pagination;
 
-const Paginate = styled.ol`
+const Paginate = styled.div`
   list-style-type: none;
   display: flex;
   justify-content: center;
   gap: 10px;
+  padding-bottom: 20px;
 
-  li {
-    display: inline;
+  .paginateStyle {
+    font-weight: bold;
+    border: 2px solid red;
+    display: flex;
+    flex-direction: row;
     justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px 5px;
-    border-radius: 5px;
-  }
-  li:hover {
-    color: white;
-    background-color: #0000a3;
+    width: 500px;
+
+    .selected {
+      color: ${(props) => (props.sameNum ? "white" : "black")};
+      background: ${(props) => (props.sameNum ? "#0000a3" : "white")};
+    }
+
+    li {
+      display: inline;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      padding: 5px 5px;
+      border-radius: 5px;
+    }
+    li:hover {
+      background-color: #ccc;
+    }
   }
 `;
