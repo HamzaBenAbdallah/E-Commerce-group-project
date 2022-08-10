@@ -1,6 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { LandingPageContext } from "../services/LandingPageContext";
+import { GlobalContext } from "../services/GlobalContext";
 import Card from "../components/Card";
 import Pagination from "./Pagination";
 
@@ -12,41 +13,68 @@ const Products = () => {
     pageVisits,
     productsPerPage,
     itemCategory,
-    categoryPageNumbers,
-    handlePageClick,
+    uniqueBodyLocation,
+    companyNumber,
+    pageNum,
   } = useContext(LandingPageContext);
+
+  const { getCompany, getItems } = useContext(GlobalContext);
+  // console.log(`getCompany:`, getCompany);
+  // console.log(`getItems:`, getItems);
+  // let arr = [];
+
+  const [dropDownClicked, setDropDownClicked] = useState(false);
+  const [dropCategory, setDropCategory] = useState(false);
+  const [dropCompany, setDropCompany] = useState(false);
+  const [pickedFilters, setPickedFilters] = useState([]);
+
+  // console.log(`itemsFromCategory:`, itemsFromCategory(""));
+  const handleChange = (data) => {
+    console.log(` target:`, data.target);
+    console.log(` value:`, data.target.value);
+    console.log(`isChecked:`, data.target.checked);
+    setPickedFilters((prev) => prev + ", " + data.target.value);
+    // setPickedFilters();
+  };
+
+  console.log(`pickedFilters:`, pickedFilters);
 
   return (
     <Wrapper>
-      <Categories>
-        {uniqueCategories.map((itemCategories, idx) => {
-          return (
-            <li
-              key={idx}
-              onClick={() => {
-                handleClick(itemCategories);
-              }}
-            >
-              {itemCategories}
-            </li>
-          );
-        })}
-      </Categories>
       <CardGrid>
-        {itemsFromCategory(itemCategory)
+        <Categories>
+          <h2 onClick={() => setDropDownClicked(!dropDownClicked)}>
+            {dropDownClicked ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
+          </h2>
+          <Drop picked={dropDownClicked}>
+            {uniqueCategories.map((itemCategories, idx) => {
+              return (
+                <li
+                  key={idx}
+                  onClick={() => {
+                    handleClick(itemCategories);
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    id="category"
+                    name="category"
+                    value={itemCategories}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  {itemCategories}
+                </li>
+              );
+            })}
+          </Drop>
+        </Categories>
+        {itemsFromCategory("")
           .slice(pageVisits, pageVisits + productsPerPage)
           .map((item) => {
             return <Card key={item.itemID} item={item} />;
           })}
       </CardGrid>
       <Pagination />
-      {/* <Paginate>
-        {categoryPageNumbers.map((num) => (
-          <li key={num} onClick={() => handlePageClick(num)}>
-            {num + 1}
-          </li>
-        ))}
-      </Paginate> */}
     </Wrapper>
   );
 };
@@ -60,18 +88,31 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const Drop = styled.div`
+  display: ${(props) => (props.picked ? "block" : "none")};
+`;
+
 const Categories = styled.ul`
   width: 100%;
   display: flex;
+  flex-direction: column;
   list-style-type: none;
-  margin: 0;
-  padding: 0;
+
+  grid-area: Menu;
+
+  h2 {
+    display: flex;
+    flex-direction: row;
+    padding-left: 20px;
+
+    border: 2px solid red;
+  }
 
   li {
     display: flex;
     border: 2px solid #0000a3;
     align-items: center;
-    justify-content: space-evenly;
+    padding-left: 20px;
     text-align: center;
     width: 100%;
     height: 35px;
@@ -79,32 +120,27 @@ const Categories = styled.ul`
   }
 `;
 
-const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-  width: 80%;
-  margin-top: 2rem;
+const Category = styled.div`
+  display: ${(props) => (props.picked ? "block" : "none")};
 `;
 
-const Paginate = styled.ol`
-  list-style-type: none;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+const Company = styled.div`
+  height: 300px;
+  overflow: scroll;
+  display: ${(props) => (props.selected ? "block" : "none")};
+`;
 
-  li {
-    display: inline;
-    justify-content: center;
-    text-align: center;
-    cursor: pointer;
-    padding: 5px 5px;
-    border-radius: 5px;
-  }
-  li:hover {
-    color: white;
-    background-color: #0000a3;
-  }
+const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "Menu . . . ."
+    "Menu . . . ."
+    "Menu . . . ."
+    "Menu . . . .";
+  gap: 30px;
+  padding: 0 6% 0 1%;
+  margin-top: 2rem;
 `;
 
 export default Products;

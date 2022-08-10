@@ -4,14 +4,14 @@ export const LandingPageContext = createContext(null);
 
 export const LandingPageProvider = ({ children }) => {
   const [itemCategory, setItemCategory] = useState([]);
-  const [pageNum, setPageNum] = useState([]); //currentPage
+  const [pageNum, setPageNum] = useState([]);
   const [numberClicked, setNumberClicked] = useState(false);
 
   const itemData = useContext(GlobalContext);
 
   const { getItems } = itemData;
 
-  const productsPerPage = 15; // pageSize
+  const productsPerPage = 12;
 
   const pageVisits = pageNum * productsPerPage;
 
@@ -23,9 +23,24 @@ export const LandingPageProvider = ({ children }) => {
   const categories = objToArray.map((items) => {
     return items.category;
   });
-  categories.unshift("All Products");
 
   const uniqueCategories = [...new Set(categories)];
+
+  const bodyLocation = objToArray.map((items) => {
+    return items.body_location;
+  });
+
+  const uniqueBodyLocation = [...new Set(bodyLocation)];
+
+  const brandID = objToArray.map((id) => {
+    return id.companyId;
+  });
+
+  const companyNumber = [...new Set(brandID)];
+  // console.log(`companyNumber:`, companyNumber);
+  // console.log(`uniqueBodyLocation:`, uniqueBodyLocation);
+
+  // categories.unshift("All Products");
 
   const itemsFromCategory = (productCategory) => {
     return objToArray.filter((item) => {
@@ -33,15 +48,17 @@ export const LandingPageProvider = ({ children }) => {
         return true;
       } else if (productCategory < 1) {
         return true;
-      } else if (productCategory === "All Products") {
-        return true;
       }
+      // else if (productCategory === "All Products") {
+      //   return true;
+      // }
     });
   };
 
   const handleClick = (event) => {
     if (event !== itemCategory) {
-      return setPageNum(0), setItemCategory(event);
+      setPageNum(0);
+      setItemCategory(event);
     }
   };
 
@@ -50,7 +67,8 @@ export const LandingPageProvider = ({ children }) => {
   );
 
   const handlePageClick = (e) => {
-    return setPageNum(e), setNumberClicked(!numberClicked);
+    setPageNum(e);
+    setNumberClicked(!numberClicked);
   };
 
   let categoryPageNumbers = [];
@@ -61,7 +79,7 @@ export const LandingPageProvider = ({ children }) => {
     }
   });
 
-  const productsInStock = itemsFromCategory(itemCategory).filter((item) => {
+  const productsInStock = itemsFromCategory("").filter((item) => {
     if (item.numInStock > 3) {
       return true;
     } else {
@@ -83,6 +101,8 @@ export const LandingPageProvider = ({ children }) => {
         pageNum,
         handlePageClick,
         productsInStock,
+        uniqueBodyLocation,
+        companyNumber,
       }}
     >
       {children}
