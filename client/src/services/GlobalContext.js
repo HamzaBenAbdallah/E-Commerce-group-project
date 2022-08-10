@@ -7,6 +7,8 @@ export const GlobalProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
   const [getItems, setGetItems] = useState([]);
+  const [getCompany, setGetCompany] = useState();
+
   const [isLoading, setIsLoading] = useState(true);
 
   const addProductToCart = async (
@@ -104,6 +106,16 @@ export const GlobalProvider = ({ children }) => {
 
   //Sets the cart on the first mount to see if the item contains something in local storage
   useEffect(() => {
+    setIsLoading(true);
+    fetch("/get-companies")
+      .then((res) => res.json())
+      .then((companies) => {
+        return setGetCompany(companies.data);
+      });
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
     checkCart();
   }, []);
   //
@@ -121,6 +133,7 @@ export const GlobalProvider = ({ children }) => {
         cart,
         setCart,
         getItems,
+        getCompany,
         addProductToCart,
         isLoading,
         removeItemFromCart,

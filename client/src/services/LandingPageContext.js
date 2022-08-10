@@ -4,14 +4,14 @@ export const LandingPageContext = createContext(null);
 
 export const LandingPageProvider = ({ children }) => {
   const [itemCategory, setItemCategory] = useState([]);
-  const [pageNum, setPageNum] = useState([]); //currentPage
+  const [pageNum, setPageNum] = useState([]);
   const [numberClicked, setNumberClicked] = useState(false);
 
   const itemData = useContext(GlobalContext);
 
   const { getItems } = itemData;
 
-  const productsPerPage = 12; // pageSize
+  const productsPerPage = 12;
 
   const pageVisits = pageNum * productsPerPage;
 
@@ -24,16 +24,23 @@ export const LandingPageProvider = ({ children }) => {
     return items.category;
   });
 
+  const uniqueCategories = [...new Set(categories)];
+
   const bodyLocation = objToArray.map((items) => {
     return items.body_location;
   });
 
   const uniqueBodyLocation = [...new Set(bodyLocation)];
-  console.log(`uniqueBodyLocation:`, uniqueBodyLocation);
+
+  const brandID = objToArray.map((id) => {
+    return id.companyId;
+  });
+
+  const companyNumber = [...new Set(brandID)];
+  // console.log(`companyNumber:`, companyNumber);
+  // console.log(`uniqueBodyLocation:`, uniqueBodyLocation);
 
   // categories.unshift("All Products");
-
-  const uniqueCategories = [...new Set(categories)];
 
   const itemsFromCategory = (productCategory) => {
     return objToArray.filter((item) => {
@@ -93,8 +100,9 @@ export const LandingPageProvider = ({ children }) => {
         numberClicked,
         pageNum,
         handlePageClick,
-
         productsInStock,
+        uniqueBodyLocation,
+        companyNumber,
       }}
     >
       {children}

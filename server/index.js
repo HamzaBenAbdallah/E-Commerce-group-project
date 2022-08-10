@@ -1,11 +1,7 @@
 "use strict";
 import express from "express";
 import morgan from "morgan";
-import {
-  getItems,
-  getProductDescription,
-  getproductPrice,
-} from "./handlers.js";
+import { getItems, getProductDescription, getCompanies } from "./handlers.js";
 
 const PORT = 4000;
 
@@ -32,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 // REST endpoints?
 app.get("/get-items", getItems);
 app.get("/products/:product_id", getProductDescription);
-app.get("/products/:product_id/price", getproductPrice);
+app.get("/get-companies", getCompanies);
 
 //cart endpoints//
 // app.post("/purchase", addPurchase);
