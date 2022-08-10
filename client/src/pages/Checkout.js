@@ -1,43 +1,186 @@
+import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { GlobalContext } from "../services/GlobalContext";
 import styled from "styled-components";
 
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  country: "",
+  address: "",
+  apt: "",
+  city: "",
+  province: "",
+  postal: "",
+  phone: "",
+};
+
 const Checkout = () => {
+  const [formData, setFormData] = useState(initialState);
+  const [itemsData, setItemsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { getItems } = useContext(GlobalContext);
+
+  const handleChange = ({ currentTarget: input }) => {
+    setFormData({
+      ...formData,
+      [input.name]: input.value,
+    });
+  };
+
+  // Get items from localStorage and extract the ids of the items
+  const items = JSON.parse(localStorage.getItem("cart"));
+  let itemIds = [];
+  items?.map((item) => {
+    itemIds.push(Object.keys(item)[0]);
+  });
+
+  const itemsArray = Object.values(getItems);
+
+  useEffect(() => {
+    // const newState = [];
+    // setIsLoading(true);
+    itemIds.map((id) => {
+      itemsArray.map((item) => {
+        if (item._id == id) {
+          console.log("item", item);
+        }
+      });
+    });
+    // setIsLoading(false);
+    // setItemsData(newState);
+  }, [getItems]);
+
+  // const fetchItems = async (id) => {
+  //   const response = await fetch(`/get-item/${id}`);
+  //   const data = await response.json();
+  //   return data.item;
+  // };
+  // // get items from the db using the ids
+  // const fetchItemsData = async () => {
+  //   const items = await Promise.all(itemIds.map((id) => fetchItems(id)));
+  //   setItemsData(items);
+  // };
+
+  // fetchItemsData();
+  // // Add the quantity of the items to each object in the itemsData array
+  // const newState = itemsData.map((itemData) => {
+  //   items.map((item) => {
+  //     if (itemData._id == Object.keys(item)[0]) {
+  //       return (itemData.quantity = Object.values(item)[0]);
+  //     }
+  //     return itemData;
+  //   });
+  // });
+
+  // setItemsData(newState);
+
   return (
     <Container>
       <Buyer>
         <InfoContainer>
           <Title>CONTACT INFORMATION</Title>
           <InputContainer>
-            <Input type="text" placeholder="FIRST NAME" />
-            <Input type="text" placeholder="LAST NAME" />
+            <Input
+              type="text"
+              placeholder="FIRST NAME"
+              name="firstName"
+              onChange={handleChange}
+              value={formData.firstName}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="LAST NAME"
+              name="lastName"
+              onChange={handleChange}
+              value={formData.lastName}
+              required
+            />
           </InputContainer>
-          <Input type="text" placeholder="EMAIL" />
+          <Input
+            type="text"
+            placeholder="EMAIL"
+            name="email"
+            onChange={handleChange}
+            value={formData.email}
+            required
+          />
         </InfoContainer>
         <InfoContainer>
           <Title>SHIPPING ADDRESS</Title>
-          <Input type="text" placeholder="COUNTRY" />
-          <Input type="text" placeholder="ADDRESS" />
-          <Input type="text" placeholder="APT/SUITE" />
+          <Input
+            type="text"
+            placeholder="COUNTRY"
+            name="country"
+            onChange={handleChange}
+            value={formData.country}
+            required
+          />
+          <Input
+            type="text"
+            placeholder="ADDRESS"
+            name="address"
+            onChange={handleChange}
+            value={formData.address}
+            required
+          />
+          <Input
+            type="text"
+            placeholder="APT/SUITE"
+            name="apt"
+            onChange={handleChange}
+            value={formData.apt}
+            required
+          />
           <InputContainer>
-            <Input type="text" placeholder="CITY" />
-            <Input type="text" placeholder="PROVINCE" />
-            <Input type="text" placeholder="POSTAL CODE" />
+            <Input
+              type="text"
+              placeholder="CITY"
+              name="city"
+              onChange={handleChange}
+              value={formData.city}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="PROVINCE"
+              name="province"
+              onChange={handleChange}
+              value={formData.province}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="POSTAL CODE"
+              name="postal"
+              onChange={handleChange}
+              value={formData.postal}
+              required
+            />
           </InputContainer>
-          <Input type="text" placeholder="PHONE" />
+          <Input
+            type="text"
+            placeholder="PHONE"
+            name="phone"
+            onChange={handleChange}
+            value={formData.phone}
+            required
+          />
         </InfoContainer>
         <Button>CONTINUE TO PAYMENT</Button>
       </Buyer>
       <Cart>
         <Items>
-          <CartItem>
-            <Image src="https://randomuser.me/api/portraits/med/men/75.jpg" />
-            <ItemTitle>man</ItemTitle>
-            <Price>$20.00</Price>
-          </CartItem>
-          <CartItem>
-            <Image src="https://randomuser.me/api/portraits/med/women/31.jpg" />
-            <ItemTitle>woman</ItemTitle>
-            <Price>$20.00</Price>
-          </CartItem>
+          {/* {!isLoading &&
+            itemsData?.map((item) => (
+              <CartItem key={item._id}>
+                <Image src={item.imageSrc} />
+                <ItemTitle>{item.name}</ItemTitle>
+                <Price>${Number(item.price.slice(1))}</Price>
+              </CartItem>
+            ))} */}
         </Items>
         <Separator />
         <Payment>
@@ -145,9 +288,8 @@ const Image = styled.img`
   margin-right: 1.5rem;
 `;
 
-const ItemTitle = styled.h4`
-  letter-spacing: 1.25px;
-  font-weight: 400;
+const ItemTitle = styled.div`
+  font-size: 0.9em;
 `;
 
 const Price = styled.p`
