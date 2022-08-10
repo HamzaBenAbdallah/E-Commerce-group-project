@@ -73,3 +73,35 @@ export const getProductDescription = async (req, res) => {
 
   client.close();
 };
+
+export const getproductPrice = async (req, res) => {
+  let { product_id } = req.params;
+  product_id = parseInt(product_id);
+  const client = new MongoClient(MONGO_URI, options);
+  await client.connect();
+  try {
+    const ecommerceData = client.db("ecommerce");
+    const specificProduct = await ecommerceData
+      .collection("items")
+      .find({ _id: product_id })
+      .toArray();
+
+    console.log("specificProduct", specificProduct);
+
+    if (specificProduct.length <= 0) {
+      res.status(404).json({ Status: 404, Message: "Product not found" });
+    } else {
+      res.status(200).json({
+        status: 200,
+        params: product_id,
+        Message: `Product ID:${product_id} found`,
+        data: Number(specificProduct[0].price.substr(1)),
+      });
+    }
+  } catch (err) {
+    console.log("error", err);
+    res.status(400).json({ Error: err });
+  }
+
+  client.close();
+};
