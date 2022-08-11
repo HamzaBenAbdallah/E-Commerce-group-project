@@ -22,6 +22,9 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { getItems } = useContext(GlobalContext);
 
+  const total = 0;
+  const shipping = 15;
+
   const handleChange = ({ currentTarget: input }) => {
     setFormData({
       ...formData,
@@ -36,45 +39,29 @@ const Checkout = () => {
     itemIds.push(Object.keys(item)[0]);
   });
 
-  const itemsArray = Object.values(getItems);
+  const itemsList = Object.values(getItems);
 
   useEffect(() => {
-    // const newState = [];
-    // setIsLoading(true);
+    const newState = [];
+    setIsLoading(true);
     itemIds.map((id) => {
-      itemsArray.map((item) => {
+      itemsList.map((item) => {
         if (item._id == id) {
-          console.log("item", item);
+          items.map((itemInCart) => {
+            if (Object.keys(itemInCart)[0] == id) {
+              newState.push({
+                ...item,
+                quantity: Object.values(itemInCart)[0],
+              });
+            }
+          });
         }
       });
     });
-    // setIsLoading(false);
-    // setItemsData(newState);
+
+    setItemsData(newState);
+    setIsLoading(false);
   }, [getItems]);
-
-  // const fetchItems = async (id) => {
-  //   const response = await fetch(`/get-item/${id}`);
-  //   const data = await response.json();
-  //   return data.item;
-  // };
-  // // get items from the db using the ids
-  // const fetchItemsData = async () => {
-  //   const items = await Promise.all(itemIds.map((id) => fetchItems(id)));
-  //   setItemsData(items);
-  // };
-
-  // fetchItemsData();
-  // // Add the quantity of the items to each object in the itemsData array
-  // const newState = itemsData.map((itemData) => {
-  //   items.map((item) => {
-  //     if (itemData._id == Object.keys(item)[0]) {
-  //       return (itemData.quantity = Object.values(item)[0]);
-  //     }
-  //     return itemData;
-  //   });
-  // });
-
-  // setItemsData(newState);
 
   return (
     <Container>
@@ -173,28 +160,29 @@ const Checkout = () => {
       </Buyer>
       <Cart>
         <Items>
-          {/* {!isLoading &&
+          {!isLoading &&
             itemsData?.map((item) => (
               <CartItem key={item._id}>
                 <Image src={item.imageSrc} />
                 <ItemTitle>{item.name}</ItemTitle>
-                <Price>${Number(item.price.slice(1))}</Price>
+                <Quantity>({item.quantity})</Quantity>
+                <Price>${Number(item.price.slice(1)) * item.quantity}</Price>
               </CartItem>
-            ))} */}
+            ))}
         </Items>
         <Separator />
         <Payment>
           <PaymentItem>
             <PaymentTitle>SUBTOTAL</PaymentTitle>
-            <Price>40$</Price>
+            <Price>${total}</Price>
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>SHIPPING</PaymentTitle>
-            <Price>15$</Price>
+            <Price>${shipping}</Price>
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>Total</PaymentTitle>
-            <Price>55$</Price>
+            <Price>${total + shipping}</Price>
           </PaymentItem>
         </Payment>
       </Cart>
@@ -214,7 +202,7 @@ const Container = styled.div`
 `;
 
 const Buyer = styled.form`
-  width: 60%;
+  width: 55%;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -260,7 +248,7 @@ const Button = styled.button`
 `;
 
 const Cart = styled.div`
-  width: 40%;
+  width: 45%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -279,20 +267,25 @@ const CartItem = styled.div`
   width: 90%;
   display: flex;
   align-items: center;
+  gap: 2rem;
 `;
 
 const Image = styled.img`
   width: 5rem;
   height: 5rem;
   object-fit: cover;
-  margin-right: 1.5rem;
 `;
 
 const ItemTitle = styled.div`
   font-size: 0.9em;
+  min-width: 18ch;
 `;
 
-const Price = styled.p`
+const Quantity = styled.div`
+  margin-left: auto;
+`;
+
+const Price = styled.div`
   margin-left: auto;
 `;
 
@@ -309,7 +302,7 @@ const PaymentItem = styled.div`
 const PaymentTitle = styled.div``;
 
 const Separator = styled.div`
-  width: 80%;
+  width: 90%;
   outline: 1px solid gray;
   align-self: center;
 `;
