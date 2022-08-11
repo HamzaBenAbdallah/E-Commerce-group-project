@@ -79,8 +79,6 @@ export const getProductDescription = async (req, res) => {
       .find({ _id: product_id })
       .toArray();
 
-    console.log("specificProduct", specificProduct);
-
     if (specificProduct.length <= 0) {
       res.status(404).json({ Status: 404, Message: "Product not found" });
     } else {
@@ -102,7 +100,6 @@ export const getProductDescription = async (req, res) => {
 export const getItemById = async (req, res) => {
   let { item_id } = req.params;
   const id = Number(item_id);
-  console.log("item_id:", item_id);
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
   const db = client.db("ecommerce");

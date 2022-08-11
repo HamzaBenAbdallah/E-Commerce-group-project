@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 import styled from "styled-components";
@@ -21,6 +22,9 @@ const Checkout = () => {
   const [itemsData, setItemsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { getItems } = useContext(GlobalContext);
+  const itemsList = Object.values(getItems);
+
+  const navigate = useNavigate();
 
   const subTotal = 0;
   const shipping = 15;
@@ -39,8 +43,6 @@ const Checkout = () => {
   items?.map((item) => {
     itemIds.push(Object.keys(item)[0]);
   });
-
-  const itemsList = Object.values(getItems);
 
   useEffect(() => {
     const newState = [];
@@ -65,9 +67,24 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("formData", formData);
-    console.log("itemsData", itemsData);
-    console.log("total", total);
+    const order = {
+      formData,
+      itemsData,
+      total,
+    };
+
+    fetch("/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ order }),
+    });
+
+    setFormData(initialState);
+    setItemsData([]);
+    localStorage.removeItem("cart");
+    navigate("/confirmation");
   };
 
   return (
@@ -94,7 +111,7 @@ const Checkout = () => {
             />
           </InputContainer>
           <Input
-            type="text"
+            type="email"
             placeholder="EMAIL"
             name="email"
             onChange={handleChange}
@@ -154,7 +171,7 @@ const Checkout = () => {
             />
           </InputContainer>
           <Input
-            type="text"
+            type="number"
             placeholder="PHONE"
             name="phone"
             onChange={handleChange}
@@ -172,7 +189,9 @@ const Checkout = () => {
                 <Image src={item.imageSrc} />
                 <ItemTitle>{item.name}</ItemTitle>
                 <Quantity>({item.quantity})</Quantity>
-                <Price>${Number(item.price.slice(1)) * item.quantity}</Price>
+                <Price>
+                  ${(Number(item.price.slice(1)) * item.quantity).toFixed(2)}
+                </Price>
               </CartItem>
             ))}
         </Items>

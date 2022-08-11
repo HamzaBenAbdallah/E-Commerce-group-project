@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 // REST endpoints?
 app.get("/get-items", getItems);
 app.get("/products/:product_id", getProductDescription);
-app.post("/create-order", createNewOrder);
+app.post("/checkout", createNewOrder);
 
 //cart endpoints//
 // app.post("/purchase", addPurchase);
