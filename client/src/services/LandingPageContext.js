@@ -23,7 +23,6 @@ export const LandingPageProvider = ({ children }) => {
   const categories = objToArray.map((items) => {
     return items.category;
   });
-  categories.unshift("All Products");
 
   const uniqueCategories = [...new Set(categories)];
 

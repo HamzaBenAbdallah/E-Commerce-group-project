@@ -68,7 +68,7 @@ const Products = () => {
             })}
           </Drop>
         </Categories>
-        {itemsFromCategory("")
+        {itemsFromCategory(itemCategory)
           .slice(pageVisits, pageVisits + productsPerPage)
           .map((item) => {
             return <Card key={item.itemID} item={item} />;
