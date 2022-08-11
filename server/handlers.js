@@ -79,8 +79,6 @@ export const getProductDescription = async (req, res) => {
       .find({ _id: product_id })
       .toArray();
 
-    console.log("specificProduct", specificProduct);
-
     if (specificProduct.length <= 0) {
       res.status(404).json({ Status: 404, Message: "Product not found" });
     } else {
@@ -99,34 +97,51 @@ export const getProductDescription = async (req, res) => {
   client.close();
 };
 
-export const getproductPrice = async (req, res) => {
-  let { product_id } = req.params;
-  product_id = parseInt(product_id);
+export const getItemById = async (req, res) => {
+  let { item_id } = req.params;
+  const id = Number(item_id);
   const client = new MongoClient(MONGO_URI, options);
   await client.connect();
-  try {
-    const ecommerceData = client.db("ecommerce");
-    const specificProduct = await ecommerceData
-      .collection("items")
-      .find({ _id: product_id })
-      .toArray();
+  const db = client.db("ecommerce");
+  const itemData = await db.collection("items").findOne({ _id: id });
 
-    console.log("specificProduct", specificProduct);
-
-    if (specificProduct.length <= 0) {
-      res.status(404).json({ Status: 404, Message: "Product not found" });
-    } else {
+  if (itemData) {
+    return (
       res.status(200).json({
         status: 200,
-        params: product_id,
-        Message: `Product ID:${product_id} found`,
-        data: Number(specificProduct[0].price.substr(1)),
-      });
-    }
-  } catch (err) {
-    console.log("error", err);
-    res.status(400).json({ Error: err });
+        item: itemData,
+        message: "Success",
+      }),
+      client.close()
+    );
+  } else {
+    return (
+      res.status(404).json({ status: 404, Message: "No item found" }),
+      client.close()
+    );
   }
+};
 
-  client.close();
+export const createNewOrder = async (req, res) => {
+  try {
+    // Connect to the database
+    const client = new MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("ecommerce");
+    const ordersDb = db.collection("orders");
+
+    // Get the data from the request body
+    const { order } = req.body;
+
+    // Insert the data into the database
+    const result = await ordersDb.insertOne(order);
+
+    // Return the result to the client
+    return res.status(201).json({
+      status: 201,
+      message: "Order created",
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, Error: "Internal server error" });
+  }
 };

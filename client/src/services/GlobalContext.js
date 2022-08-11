@@ -24,14 +24,15 @@ export const GlobalProvider = ({ children }) => {
       await setCart([...cart], (cart[indexOfItem][id] += quantityToAdd));
       let totalAmountOfmoney =
         quantityToAdd * Number(productInformation.price.substr(1));
-      setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
+      await setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
+      localStorage.setItem("cart-Total", JSON.stringify(cartTotal));
       return localStorage.setItem("cart", JSON.stringify([...cart]));
     } else if (cart.filter((item) => item[id]).length === 0) {
       await setCart([...cart, itemsObject]);
-
       let totalAmountOfmoney =
         quantityToAdd * Number(productInformation.price.substr(1));
-      setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
+      await setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
+      localStorage.setItem("cart-Total", JSON.stringify(cartTotal));
       return localStorage.setItem(
         "cart",
         JSON.stringify([...cart, itemsObject])
@@ -78,14 +79,20 @@ export const GlobalProvider = ({ children }) => {
   //check cart to find items in local storage
   const checkCart = async () => {
     let cart = await localStorage.getItem("cart");
+    let cartTotalFromLocalStorage = await localStorage.getItem("cart-Total");
     if (cart === null) {
       const newCart = [];
+      const newCartTotal = 0;
       setCart(newCart);
+      setCartTotal(newCartTotal);
       localStorage.setItem("cart", JSON.stringify(newCart));
+      localStorage.setItem("cart-Total", JSON.stringify(newCartTotal));
       return;
     } else {
-      const newCart = await JSON.parse(cart);
+      let newCart = await JSON.parse(cart);
       setCart(newCart);
+      let newCarttotals = await JSON.parse(cartTotalFromLocalStorage);
+      setCartTotal(newCarttotals);
       return;
     }
   };
