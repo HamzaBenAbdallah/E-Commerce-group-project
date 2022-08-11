@@ -1,57 +1,213 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { GlobalContext } from "../services/GlobalContext";
 import styled from "styled-components";
 
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  country: "",
+  address: "",
+  apt: "",
+  city: "",
+  province: "",
+  postal: "",
+  phone: "",
+};
+
 const Checkout = () => {
+  const [formData, setFormData] = useState(initialState);
+  const [itemsData, setItemsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { getItems } = useContext(GlobalContext);
+  const itemsList = Object.values(getItems);
+
+  const navigate = useNavigate();
+
+  const subTotal = 0;
+  const shipping = 15;
+  const total = subTotal + shipping;
+
+  const handleChange = ({ currentTarget: input }) => {
+    setFormData({
+      ...formData,
+      [input.name]: input.value,
+    });
+  };
+
+  // Get items from localStorage and extract the ids of the items
+  const items = JSON.parse(localStorage.getItem("cart"));
+  let itemIds = [];
+  items?.map((item) => {
+    itemIds.push(Object.keys(item)[0]);
+  });
+
+  useEffect(() => {
+    const newState = [];
+    setIsLoading(true);
+    itemIds.map((id) => {
+      itemsList.map((item) => {
+        if (item._id == id) {
+          items.map((itemInCart) => {
+            if (Object.keys(itemInCart)[0] == id) {
+              newState.push({
+                ...item,
+                quantity: Object.values(itemInCart)[0],
+              });
+            }
+          });
+        }
+      });
+    });
+    setItemsData(newState);
+    setIsLoading(false);
+  }, [getItems]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const order = {
+      formData,
+      itemsData,
+      total,
+    };
+
+    fetch("/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ order }),
+    });
+
+    setFormData(initialState);
+    setItemsData([]);
+    localStorage.removeItem("cart");
+    navigate("/confirmation");
+  };
+
   return (
     <Container>
-      <Buyer>
+      <Buyer onSubmit={handleSubmit}>
         <InfoContainer>
           <Title>CONTACT INFORMATION</Title>
           <InputContainer>
-            <Input type="text" placeholder="FIRST NAME" />
-            <Input type="text" placeholder="LAST NAME" />
+            <Input
+              type="text"
+              placeholder="FIRST NAME"
+              name="firstName"
+              onChange={handleChange}
+              value={formData.firstName}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="LAST NAME"
+              name="lastName"
+              onChange={handleChange}
+              value={formData.lastName}
+              required
+            />
           </InputContainer>
-          <Input type="text" placeholder="EMAIL" />
+          <Input
+            type="email"
+            placeholder="EMAIL"
+            name="email"
+            onChange={handleChange}
+            value={formData.email}
+            required
+          />
         </InfoContainer>
         <InfoContainer>
           <Title>SHIPPING ADDRESS</Title>
-          <Input type="text" placeholder="COUNTRY" />
-          <Input type="text" placeholder="ADDRESS" />
-          <Input type="text" placeholder="APT/SUITE" />
+          <Input
+            type="text"
+            placeholder="COUNTRY"
+            name="country"
+            onChange={handleChange}
+            value={formData.country}
+            required
+          />
+          <Input
+            type="text"
+            placeholder="ADDRESS"
+            name="address"
+            onChange={handleChange}
+            value={formData.address}
+            required
+          />
+          <Input
+            type="text"
+            placeholder="APT/SUITE"
+            name="apt"
+            onChange={handleChange}
+            value={formData.apt}
+          />
           <InputContainer>
-            <Input type="text" placeholder="CITY" />
-            <Input type="text" placeholder="PROVINCE" />
-            <Input type="text" placeholder="POSTAL CODE" />
+            <Input
+              type="text"
+              placeholder="CITY"
+              name="city"
+              onChange={handleChange}
+              value={formData.city}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="PROVINCE"
+              name="province"
+              onChange={handleChange}
+              value={formData.province}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="POSTAL CODE"
+              name="postal"
+              onChange={handleChange}
+              value={formData.postal}
+              required
+            />
           </InputContainer>
-          <Input type="text" placeholder="PHONE" />
+          <Input
+            type="number"
+            placeholder="PHONE"
+            name="phone"
+            onChange={handleChange}
+            value={formData.phone}
+            required
+          />
         </InfoContainer>
-        <Button>CONTINUE TO PAYMENT</Button>
+        <Button type="submit">CONTINUE TO PAYMENT</Button>
       </Buyer>
       <Cart>
         <Items>
-          <CartItem>
-            <Image src="https://randomuser.me/api/portraits/med/men/75.jpg" />
-            <ItemTitle>man</ItemTitle>
-            <Price>$20.00</Price>
-          </CartItem>
-          <CartItem>
-            <Image src="https://randomuser.me/api/portraits/med/women/31.jpg" />
-            <ItemTitle>woman</ItemTitle>
-            <Price>$20.00</Price>
-          </CartItem>
+          {!isLoading &&
+            itemsData?.map((item) => (
+              <CartItem key={item._id}>
+                <Image src={item.imageSrc} />
+                <ItemTitle>{item.name}</ItemTitle>
+                <Quantity>({item.quantity})</Quantity>
+                <Price>
+                  ${(Number(item.price.slice(1)) * item.quantity).toFixed(2)}
+                </Price>
+              </CartItem>
+            ))}
         </Items>
         <Separator />
         <Payment>
           <PaymentItem>
             <PaymentTitle>SUBTOTAL</PaymentTitle>
-            <Price>40$</Price>
+            <Price>${subTotal}</Price>
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>SHIPPING</PaymentTitle>
-            <Price>15$</Price>
+            <Price>${shipping}</Price>
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>Total</PaymentTitle>
-            <Price>55$</Price>
+            <Price>${total}</Price>
           </PaymentItem>
         </Payment>
       </Cart>
@@ -71,7 +227,7 @@ const Container = styled.div`
 `;
 
 const Buyer = styled.form`
-  width: 60%;
+  width: 55%;
   display: flex;
   flex-direction: column;
   gap: 3rem;
@@ -117,7 +273,7 @@ const Button = styled.button`
 `;
 
 const Cart = styled.div`
-  width: 40%;
+  width: 45%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -129,28 +285,33 @@ const Items = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  gap: 1rem;
+  gap: 1.5rem;
 `;
 
 const CartItem = styled.div`
   width: 90%;
   display: flex;
   align-items: center;
+  gap: 2rem;
 `;
 
 const Image = styled.img`
   width: 5rem;
   height: 5rem;
   object-fit: cover;
-  margin-right: 1.5rem;
 `;
 
-const ItemTitle = styled.h4`
-  letter-spacing: 1.25px;
-  font-weight: 400;
+const ItemTitle = styled.div`
+  font-size: 0.9em;
+  min-width: 18ch;
+  line-height: 1.2em;
 `;
 
-const Price = styled.p`
+const Quantity = styled.div`
+  margin-left: auto;
+`;
+
+const Price = styled.div`
   margin-left: auto;
 `;
 
@@ -167,7 +328,7 @@ const PaymentItem = styled.div`
 const PaymentTitle = styled.div``;
 
 const Separator = styled.div`
-  width: 80%;
+  width: 90%;
   outline: 1px solid gray;
   align-self: center;
 `;
