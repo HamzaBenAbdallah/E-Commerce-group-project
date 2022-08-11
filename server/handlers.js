@@ -124,3 +124,27 @@ export const getItemById = async (req, res) => {
     );
   }
 };
+
+export const createNewOrder = async (req, res) => {
+  try {
+    // Connect to the database
+    const client = new MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("ecommerce");
+    const ordersDb = db.collection("orders");
+
+    // Get the data from the request body
+    const { order } = req.body;
+
+    // Insert the data into the database
+    const result = await ordersDb.insertOne(order);
+
+    // Return the result to the client
+    return res.status(201).json({
+      status: 201,
+      message: "Order created",
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, Error: "Internal server error" });
+  }
+};

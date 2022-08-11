@@ -22,8 +22,9 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { getItems } = useContext(GlobalContext);
 
-  const total = 0;
+  const subTotal = 0;
   const shipping = 15;
+  const total = subTotal + shipping;
 
   const handleChange = ({ currentTarget: input }) => {
     setFormData({
@@ -58,14 +59,20 @@ const Checkout = () => {
         }
       });
     });
-
     setItemsData(newState);
     setIsLoading(false);
   }, [getItems]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("formData", formData);
+    console.log("itemsData", itemsData);
+    console.log("total", total);
+  };
+
   return (
     <Container>
-      <Buyer>
+      <Buyer onSubmit={handleSubmit}>
         <InfoContainer>
           <Title>CONTACT INFORMATION</Title>
           <InputContainer>
@@ -119,7 +126,6 @@ const Checkout = () => {
             name="apt"
             onChange={handleChange}
             value={formData.apt}
-            required
           />
           <InputContainer>
             <Input
@@ -156,7 +162,7 @@ const Checkout = () => {
             required
           />
         </InfoContainer>
-        <Button>CONTINUE TO PAYMENT</Button>
+        <Button type="submit">CONTINUE TO PAYMENT</Button>
       </Buyer>
       <Cart>
         <Items>
@@ -174,7 +180,7 @@ const Checkout = () => {
         <Payment>
           <PaymentItem>
             <PaymentTitle>SUBTOTAL</PaymentTitle>
-            <Price>${total}</Price>
+            <Price>${subTotal}</Price>
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>SHIPPING</PaymentTitle>
@@ -182,7 +188,7 @@ const Checkout = () => {
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>Total</PaymentTitle>
-            <Price>${total + shipping}</Price>
+            <Price>${total}</Price>
           </PaymentItem>
         </Payment>
       </Cart>
@@ -260,7 +266,7 @@ const Items = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
-  gap: 1rem;
+  gap: 1.5rem;
 `;
 
 const CartItem = styled.div`
@@ -279,6 +285,7 @@ const Image = styled.img`
 const ItemTitle = styled.div`
   font-size: 0.9em;
   min-width: 18ch;
+  line-height: 1.2em;
 `;
 
 const Quantity = styled.div`
