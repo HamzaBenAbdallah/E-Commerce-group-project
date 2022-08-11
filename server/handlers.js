@@ -15,11 +15,21 @@ export const getItems = async (req, res) => {
   const ecommerceData = client.db("ecommerce");
   const itemsData = await ecommerceData.collection("items").find().toArray();
 
-  if (itemsData.length > 0) {
+  const itemArrToObj = (arrData, idx) => {
+    const result = {};
+    arrData.forEach((item) => {
+      result[item[idx]] = item;
+    });
+    return result;
+  };
+
+  const items = itemArrToObj(itemsData, "_id");
+
+  if (Object.keys(items).length > 0) {
     return (
       res.status(200).json({
         status: 200,
-        itemsData,
+        items,
         message: "Success",
       }),
       client.close()
