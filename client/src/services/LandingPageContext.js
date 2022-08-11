@@ -11,7 +11,7 @@ export const LandingPageProvider = ({ children }) => {
 
   const { getItems } = itemData;
 
-  const productsPerPage = 15; // pageSize
+  const productsPerPage = 12;
 
   const pageVisits = pageNum * productsPerPage;
 

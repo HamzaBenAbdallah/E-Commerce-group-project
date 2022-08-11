@@ -88,7 +88,7 @@ export const GlobalProvider = ({ children }) => {
     checkCart();
   }, []);
 
-  console.log("cart", cart);
+  // console.log("cart", cart);
 
   return (
     <GlobalContext.Provider

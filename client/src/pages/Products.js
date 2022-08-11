@@ -24,20 +24,16 @@ const Products = () => {
   // let arr = [];
 
   const [dropDownClicked, setDropDownClicked] = useState(false);
-  const [dropCategory, setDropCategory] = useState(false);
-  const [dropCompany, setDropCompany] = useState(false);
-  const [pickedFilters, setPickedFilters] = useState([]);
+  // const [dropCategory, setDropCategory] = useState(false);
+  // const [dropCompany, setDropCompany] = useState(false);
+  const [checked, setChecked] = useState([]);
 
   // console.log(`itemsFromCategory:`, itemsFromCategory(""));
   const handleChange = (data) => {
     console.log(` target:`, data.target);
     console.log(` value:`, data.target.value);
     console.log(`isChecked:`, data.target.checked);
-    setPickedFilters((prev) => prev + ", " + data.target.value);
-    // setPickedFilters();
   };
-
-  console.log(`pickedFilters:`, pickedFilters);
 
   return (
     <Wrapper>
@@ -51,9 +47,9 @@ const Products = () => {
               return (
                 <li
                   key={idx}
-                  onClick={() => {
-                    handleClick(itemCategories);
-                  }}
+                  // onClick={() => {
+                  //   handleClick(itemCategories);
+                  // }}
                 >
                   <input
                     type="checkbox"
