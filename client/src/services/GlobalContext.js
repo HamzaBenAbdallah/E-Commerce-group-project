@@ -24,18 +24,14 @@ export const GlobalProvider = ({ children }) => {
       await setCart([...cart], (cart[indexOfItem][id] += quantityToAdd));
       let totalAmountOfmoney =
         quantityToAdd * Number(productInformation.price.substr(1));
-
       setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
-
       return localStorage.setItem("cart", JSON.stringify([...cart]));
     } else if (cart.filter((item) => item[id]).length === 0) {
       await setCart([...cart, itemsObject]);
 
       let totalAmountOfmoney =
         quantityToAdd * Number(productInformation.price.substr(1));
-
       setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
-
       return localStorage.setItem(
         "cart",
         JSON.stringify([...cart, itemsObject])
