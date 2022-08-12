@@ -3,8 +3,13 @@ import styled from "styled-components";
 import { GlobalContext } from "../services/GlobalContext";
 
 const ItemsInCart = ({ currentItem, index, id }) => {
-  const { cart, setCart, removeItemFromCart, updateQuantityOfItemsInCart } =
-    useContext(GlobalContext);
+  const {
+    cart,
+    setCart,
+    removeItemFromCart,
+    increaseQuantityInCart,
+    decreaseQuantityInCart,
+  } = useContext(GlobalContext);
   const [itemInformation, setItemInformation] = useState();
 
   useEffect(() => {
@@ -33,16 +38,13 @@ const ItemsInCart = ({ currentItem, index, id }) => {
           <span>{itemInformation.price}</span>
         </td>
         <td>
-          {/* <span className="quantity">{Math.floor(Number(quantity))}</span> */}
-          <input
-            type="number"
-            inputMode="numeric"
-            value={Math.floor(Number(currentItem[id]))}
-            placeholder={Math.floor(Number(currentItem[id]))}
-            onChange={(event) => {
-              updateQuantityOfItemsInCart(event, itemInformation._id);
-            }}
-          ></input>
+          <button onClick={(event) => increaseQuantityInCart(event, id)}>
+            +
+          </button>
+          <label>{currentItem[id]}</label>
+          <button onClick={(event) => decreaseQuantityInCart(event, id)}>
+            -
+          </button>
         </td>
         <td>
           {" "}
