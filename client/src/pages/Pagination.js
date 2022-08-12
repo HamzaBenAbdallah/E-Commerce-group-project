@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { LandingPageContext } from "../services/LandingPageContext";
+import { PaginationContext } from "../services/PaginateContext";
 import ReactPaginate from "react-paginate";
 
 const Pagination = () => {
   const { categoryPageNumbers, handlePageClick, pageNum } =
-    useContext(LandingPageContext);
+    useContext(PaginationContext);
 
   const [selectedNum, setSelectedNum] = useState();
 
@@ -15,9 +15,6 @@ const Pagination = () => {
     setSelectedNum(event.selected);
     handlePageClick(event.selected);
   };
-
-  // console.log(`selectedNum:`, selectedNum);
-  // console.log(`pageNum:`, pageNum);
 
   return (
     <Paginate sameNum={pageNum === selectedNum}>

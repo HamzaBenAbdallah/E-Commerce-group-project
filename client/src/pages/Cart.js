@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 const Cart = () => {
   const [inputValue, setInputValue] = useState();
-  const { cart, updateQuantityOfItemsInCart } = useContext(GlobalContext);
+  const { cart, cartTotal, setCartTotal } = useContext(GlobalContext);
 
   if (cart.length > 0) {
     return (
@@ -35,7 +35,15 @@ const Cart = () => {
             );
           })}
         </table>
-        <div>Total:1200</div>
+
+        {!cartTotal ? (
+          <div>{"Total:"}</div>
+        ) : (
+          <div className="total">
+            <span>Total:</span>
+            {cartTotal.toFixed(2)}
+          </div>
+        )}
 
         <NavLink to="/checkout">
           <button>Checkout</button>
@@ -45,17 +53,7 @@ const Cart = () => {
   } else {
     return (
       <CartWrapper>
-        <table>
-          {/* {cart.map((object, index) => {
-            return (
-              <ItemsInCart
-                key={`item ${index}`}
-                currentItem={object}
-                index={index}
-              />
-            );
-          })} */}
-        </table>
+        <table></table>
         <h1>No items in the cart</h1>
         <div></div>
       </CartWrapper>

@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 const Card = ({ item }) => {
   return (
     <NavLink
-      key={item.itemID}
-      id={item.itemID}
-      to={`/products/${item.itemID}`}
+      key={item._id}
+      id={item._id}
+      to={`/products/${item._id}`}
       opacity={item?.numInStock ? 0 : 1}
       quantity={item?.numInStock ? 0 : 1}
     >

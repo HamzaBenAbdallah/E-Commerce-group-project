@@ -19,8 +19,6 @@ const ProductDescription = () => {
       .then((data) => setProductInformation(data.data[0]));
   }, [cart]);
 
-  console.log("productInformation", productInformation);
-
   return (
     <>
       {productInformation ? (
@@ -75,7 +73,12 @@ const ProductDescription = () => {
 
             <button
               onClick={(event) =>
-                addProductToCart(product_id, event, quantityToAdd)
+                addProductToCart(
+                  product_id,
+                  event,
+                  quantityToAdd,
+                  productInformation
+                )
               }
             >
               Add to cart

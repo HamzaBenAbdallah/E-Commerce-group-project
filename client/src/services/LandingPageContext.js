@@ -1,30 +1,29 @@
 import React, { createContext, useState, useContext } from "react";
 import { GlobalContext } from "./GlobalContext";
+
 export const LandingPageContext = createContext(null);
 
 export const LandingPageProvider = ({ children }) => {
   const [itemCategory, setItemCategory] = useState([]);
-  const [pageNum, setPageNum] = useState([]); //currentPage
-  const [numberClicked, setNumberClicked] = useState(false);
+  const [pageNum, setPageNum] = useState([]);
 
   const itemData = useContext(GlobalContext);
 
   const { getItems } = itemData;
 
-  const productsPerPage = 12;
-
-  const pageVisits = pageNum * productsPerPage;
-
-  const objToArray = Object.entries(getItems).map(([itemID, idx]) => ({
-    itemID,
-    ...idx,
-  }));
+  const objToArray = Object.values(getItems);
 
   const categories = objToArray.map((items) => {
     return items.category;
   });
 
   const uniqueCategories = [...new Set(categories)];
+
+  const BodyLocation = objToArray.map((items) => {
+    return items.body_location;
+  });
+
+  const uniqueBodyLocation = [...new Set(BodyLocation)];
 
   const itemsFromCategory = (productCategory) => {
     return objToArray.filter((item) => {
@@ -40,25 +39,10 @@ export const LandingPageProvider = ({ children }) => {
 
   const handleClick = (event) => {
     if (event !== itemCategory) {
-      return setPageNum(0), setItemCategory(event);
+      setPageNum(0);
+      setItemCategory(event);
     }
   };
-
-  let numPages = Math.floor(
-    (itemsFromCategory(itemCategory).length - 1) / productsPerPage
-  );
-
-  const handlePageClick = (e) => {
-    return setPageNum(e), setNumberClicked(!numberClicked);
-  };
-
-  let categoryPageNumbers = [];
-
-  itemsFromCategory(itemCategory).map((x, idx) => {
-    if (idx <= numPages) {
-      categoryPageNumbers.push(idx);
-    }
-  });
 
   const productsInStock = itemsFromCategory(itemCategory).filter((item) => {
     if (item.numInStock > 3) {
@@ -74,14 +58,11 @@ export const LandingPageProvider = ({ children }) => {
         uniqueCategories,
         handleClick,
         itemsFromCategory,
-        pageVisits,
-        productsPerPage,
         itemCategory,
-        categoryPageNumbers,
-        numberClicked,
         pageNum,
-        handlePageClick,
         productsInStock,
+        uniqueBodyLocation,
+        setPageNum,
       }}
     >
       {children}
