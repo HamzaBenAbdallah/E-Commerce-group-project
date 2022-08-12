@@ -5,7 +5,14 @@ export const GlobalContext = createContext();
 
 export const GlobalProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [cartTotal, setCartTotal] = useState(0);
+  const [cartTotal, setCartTotal] = useState(() => {
+    if (cart.length <= 0) {
+      return 0;
+    } else if (cart.length >= 1) {
+      return calculateCartTotal();
+    }
+  });
+
   const [getItems, setGetItems] = useState([]);
   const [getCompany, setGetCompany] = useState();
 
@@ -19,35 +26,18 @@ export const GlobalProvider = ({ children }) => {
   ) => {
     event.preventDefault();
     let itemsObject = { [id]: quantityToAdd };
-    if (cart.filter((item) => item[id]).length > 0) {
+    if (cart?.filter((item) => item[id]).length > 0) {
       let indexOfItem = await cart.findIndex((item) => item[id]);
       await setCart([...cart], (cart[indexOfItem][id] += quantityToAdd));
-      let totalAmountOfmoney =
-        quantityToAdd * Number(productInformation.price.substr(1));
-      await setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
-      localStorage.setItem("cart-Total", JSON.stringify(cartTotal));
-      return localStorage.setItem("cart", JSON.stringify([...cart]));
     } else if (cart.filter((item) => item[id]).length === 0) {
       await setCart([...cart, itemsObject]);
-      let totalAmountOfmoney =
-        quantityToAdd * Number(productInformation.price.substr(1));
-      await setCartTotal((prevCartTotal) => prevCartTotal + totalAmountOfmoney);
-      localStorage.setItem("cart-Total", JSON.stringify(cartTotal));
-      return localStorage.setItem(
-        "cart",
-        JSON.stringify([...cart, itemsObject])
-      );
     }
   };
-  console.log("cartTotal", cartTotal);
+
   const removeItemFromCart = (event, id) => {
     event.preventDefault();
     const newArrayWithoutSelectedId = cart.filter((object) => !object[id]);
-    setCart([...newArrayWithoutSelectedId]);
-    return localStorage.setItem(
-      "cart",
-      JSON.stringify([...newArrayWithoutSelectedId])
-    );
+    return setCart([...newArrayWithoutSelectedId]);
   };
 
   const increaseQuantityInCart = async (event, id) => {
@@ -70,33 +60,17 @@ export const GlobalProvider = ({ children }) => {
         let copyOfCart = [...cart];
         copyOfCart.splice(i, 1);
         setCart([...copyOfCart]);
-        localStorage.setItem("cart", JSON.stringify([...copyOfCart]));
         return console.log("deleted", cart[i]);
       }
     }
   };
-
   //check cart to find items in local storage
   const checkCart = async () => {
-    let cart = await localStorage.getItem("cart");
-    let cartTotalFromLocalStorage = await localStorage.getItem("cart-Total");
-    if (cart === null) {
-      const newCart = [];
-      const newCartTotal = 0;
-      setCart(newCart);
-      setCartTotal(newCartTotal);
-      localStorage.setItem("cart", JSON.stringify(newCart));
-      localStorage.setItem("cart-Total", JSON.stringify(newCartTotal));
-      return;
-    } else {
-      let newCart = await JSON.parse(cart);
-      setCart(newCart);
-      let newCarttotals = await JSON.parse(cartTotalFromLocalStorage);
-      setCartTotal(newCarttotals);
-      return;
+    let cartFromLocalStorage = await localStorage.getItem("cart");
+    if (cartFromLocalStorage) {
+      await setCart(JSON.parse(cartFromLocalStorage));
     }
   };
-
   useEffect(() => {
     setIsLoading(true);
     fetch("/get-items")
@@ -106,7 +80,6 @@ export const GlobalProvider = ({ children }) => {
       });
     setIsLoading(false);
   }, []);
-
   //Sets the cart on the first mount to see if the item contains something in local storage
   useEffect(() => {
     setIsLoading(true);
@@ -117,18 +90,48 @@ export const GlobalProvider = ({ children }) => {
       });
     setIsLoading(false);
   }, []);
-
   useEffect(() => {
     checkCart();
   }, []);
-  //
+
+  useEffect(() => {
+    calculateCartTotal();
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  });
+
+  const calculateCartTotal = async () => {
+    if (cart.length >= 1) {
+      const allItems = await Object.values(getItems);
+      let idsOfItemsInCart = await cart?.map((object) =>
+        parseInt(Object.keys(object)[0])
+      );
+      if (idsOfItemsInCart.length >= 1) {
+        let itemsIncart = await idsOfItemsInCart?.map((id, index) => {
+          return allItems?.filter((item) => {
+            return item._id == parseInt(id);
+          })[0];
+        });
+        let totals = await cart?.map((object, index) => {
+          let quantity = object[parseInt(idsOfItemsInCart[index])]; //w
+          let prices = itemsIncart[index]?.price.substr(1);
+          let total = quantity * prices;
+          return total;
+        });
+        setCartTotal(totals.reduce((a, b) => a + b));
+      }
+    }
+  };
+
+  console.log("cart", cart);
+  console.log("cartTotal", cartTotal);
 
   //This function runs every time the cart changes to find if we wanted to remove an item from our cart
   useEffect(() => {
     chekCartForEmptyItems();
   }, [cart]);
-
-  console.log("cart", cart);
 
   return (
     <GlobalContext.Provider

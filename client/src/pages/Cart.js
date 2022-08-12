@@ -35,7 +35,15 @@ const Cart = () => {
             );
           })}
         </table>
-        <div>{cartTotal}</div>
+
+        {!cartTotal ? (
+          <div>{"Total:"}</div>
+        ) : (
+          <div className="total">
+            <span>Total:</span>
+            {cartTotal.toFixed(2)}
+          </div>
+        )}
 
         <NavLink to="/checkout">
           <button>Checkout</button>
