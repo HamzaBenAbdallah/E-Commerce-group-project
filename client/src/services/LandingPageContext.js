@@ -4,47 +4,47 @@ import { GlobalContext } from "./GlobalContext";
 export const LandingPageContext = createContext(null);
 
 export const LandingPageProvider = ({ children }) => {
-  const [itemCategory, setItemCategory] = useState([]);
-  const [pageNum, setPageNum] = useState([]);
+  // const [itemCategory, setItemCategory] = useState([]);
+  // const [pageNum, setPageNum] = useState([]);
 
   const itemData = useContext(GlobalContext);
 
   const { getItems } = itemData;
 
-  const objToArray = Object.values(getItems);
+  const getAllItems = Object.values(getItems);
 
-  const categories = objToArray.map((items) => {
+  const categories = getAllItems.map((items) => {
     return items.category;
   });
 
   const uniqueCategories = [...new Set(categories)];
 
-  const BodyLocation = objToArray.map((items) => {
+  const BodyLocation = getAllItems.map((items) => {
     return items.body_location;
   });
 
   const uniqueBodyLocation = [...new Set(BodyLocation)];
 
-  const itemsFromCategory = (productCategory) => {
-    return objToArray.filter((item) => {
-      if (item.category === productCategory) {
-        return true;
-      } else if (productCategory < 1) {
-        return true;
-      } else if (productCategory === "All Products") {
-        return true;
-      }
-    });
-  };
+  // const itemsFromCategory =
+  //    getAllItems.filter((item) => {
+  //     if (item.category === productCategory) {
+  //       return true;
+  //     } else if (productCategory < 1) {
+  //       return true;
+  //     } else if (productCategory === "All Products") {
+  //       return true;
+  //     }
+  //   });
+  // };
 
-  const handleClick = (event) => {
-    if (event !== itemCategory) {
-      setPageNum(0);
-      setItemCategory(event);
-    }
-  };
+  // const handleClick = (event) => {
+  //   if (event !== itemCategory) {
+  //     setPageNum(0);
+  //     setItemCategory(event);
+  //   }
+  // };
 
-  const productsInStock = itemsFromCategory(itemCategory).filter((item) => {
+  const productsInStock = getAllItems.filter((item) => {
     if (item.numInStock > 3) {
       return true;
     } else {
@@ -56,13 +56,13 @@ export const LandingPageProvider = ({ children }) => {
     <LandingPageContext.Provider
       value={{
         uniqueCategories,
-        handleClick,
-        itemsFromCategory,
-        itemCategory,
-        pageNum,
+        // handleClick,
+        // itemsFromCategory,
+        // itemCategory,
+        // pageNum,
         productsInStock,
         uniqueBodyLocation,
-        setPageNum,
+        // setPageNum,
       }}
     >
       {children}

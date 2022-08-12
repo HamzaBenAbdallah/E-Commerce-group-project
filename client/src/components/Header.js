@@ -29,14 +29,14 @@ const Header = () => {
         <Menu>
           <Link to="/products">
             <Item
-              onClick={() => {
-                handleClick("");
-              }}
+            // onClick={() => {
+            //   handleClick("");
+            // }}
             >
               Products
             </Item>
           </Link>
-          <ol>
+          {/* <ol>
             {uniqueCategories.map((clickedCategory, idx) => {
               return (
                 <Link to="/products" key={idx}>
@@ -50,7 +50,7 @@ const Header = () => {
                 </Link>
               );
             })}
-          </ol>
+          </ol> */}
         </Menu>
       </Container>
       <Container>

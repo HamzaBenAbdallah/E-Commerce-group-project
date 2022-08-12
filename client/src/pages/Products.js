@@ -10,7 +10,8 @@ const Products = () => {
   const { uniqueCategories, uniqueBodyLocation } =
     useContext(LandingPageContext);
 
-  const { pageVisits, productsPerPage } = useContext(PaginationContext);
+  const { pageVisits, productsPerPage, setPageNum } =
+    useContext(PaginationContext);
 
   const {
     handleCategory,
@@ -19,6 +20,8 @@ const Products = () => {
     getAllItems,
     getCategory,
     getBodyLocation,
+    setGetBodyLocation,
+    setGetCategory,
   } = useContext(FilterContext);
 
   const [dropCategory, setDropCategory] = useState(false);
@@ -28,6 +31,15 @@ const Products = () => {
     <Wrapper>
       <CardGrid>
         <Categories>
+          <Btn
+            onClick={() => {
+              setGetCategory("");
+              setGetBodyLocation("");
+            }}
+          >
+            Reset
+          </Btn>
+
           <h2 onClick={() => setDropCategory(!dropCategory)}>
             {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
           </h2>
@@ -41,6 +53,7 @@ const Products = () => {
                     name="category"
                     value={itemCategories}
                     onChange={(e) => handleCategory(e)}
+                    onClick={() => setPageNum(0)}
                   />
                   {itemCategories}
                 </li>
@@ -60,6 +73,7 @@ const Products = () => {
                     name="bodLocation"
                     value={bodLoca}
                     onChange={(e) => handleBodyLocation(e)}
+                    onClick={() => setPageNum(0)}
                   />
                   {bodLoca}
                 </li>
@@ -102,7 +116,6 @@ const Categories = styled.ul`
   display: flex;
   flex-direction: column;
   list-style-type: none;
-
   grid-area: Menu;
 
   h2 {
@@ -118,7 +131,6 @@ const Categories = styled.ul`
     border: 2px solid #0000a3;
     align-items: center;
     padding-left: 20px;
-    text-align: center;
     width: 100%;
     height: 35px;
     cursor: pointer;
@@ -148,6 +160,16 @@ const CardGrid = styled.div`
   padding: 0 6% 0 1%;
   margin-top: 2rem;
   width: 100vw;
+`;
+
+const Btn = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
+  width: 50%;
+  margin-bottom: 1rem;
+  /* border: 2px solid blue; */
 `;
 
 export default Products;

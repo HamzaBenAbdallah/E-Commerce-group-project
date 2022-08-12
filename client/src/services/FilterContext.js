@@ -10,6 +10,7 @@ export const FilterProviders = ({ children }) => {
 
   const [getCategory, setGetCategory] = useState([]);
   const [getBodyLocation, setGetBodyLocation] = useState([]);
+  const [resetBtn, setResetBtn] = useState(false);
 
   const handleCategory = (data) => {
     const newVal = [...getCategory];
@@ -32,6 +33,17 @@ export const FilterProviders = ({ children }) => {
     }
     setGetBodyLocation(bodyValue);
   };
+
+  // const handleBrands = (data) => {
+  //   const bodyValue = [...getBodyLocation];
+  //   if (data.target.checked === true) {
+  //     bodyValue.push(data.target.value);
+  //   } else if (data.target.checked === false) {
+  //     const removeIdx = bodyValue.indexOf(data.target.value);
+  //     bodyValue.splice(removeIdx, 1);
+  //   }
+  //   setGetBodyLocation(bodyValue);
+  // };
 
   const getAllItems = Object.values(getItems);
 
@@ -71,6 +83,8 @@ export const FilterProviders = ({ children }) => {
         getAllItems,
         getCategory,
         getBodyLocation,
+        setGetBodyLocation,
+        setGetCategory,
       }}
     >
       {children}

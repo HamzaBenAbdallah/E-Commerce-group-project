@@ -2,14 +2,38 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { PaginationContext } from "../services/PaginateContext";
 import ReactPaginate from "react-paginate";
+import { FilterContext } from "../services/FilterContext";
+import { GlobalContext } from "../services/GlobalContext";
 
 const Pagination = () => {
-  const { categoryPageNumbers, handlePageClick, pageNum } =
+  const { handlePageClick, productsPerPage, setPageNum, pageNum } =
     useContext(PaginationContext);
 
+  const { filterAllSeletions } = useContext(FilterContext);
+
+  const itemData = useContext(GlobalContext);
+
+  const { getItems } = itemData;
+  const getAllItems = Object.values(getItems);
   const [selectedNum, setSelectedNum] = useState();
 
-  const getLastIdx = categoryPageNumbers.at(-1) + 1;
+  let pageNumbers = [];
+
+  const numberOfPages = () => {
+    if (filterAllSeletions.length < 1) {
+      return (getAllItems.length - 1) / productsPerPage;
+    } else if (filterAllSeletions.length > 0) {
+      return (filterAllSeletions.length - 1) / productsPerPage;
+    }
+  };
+
+  getAllItems.map((x, idx) => {
+    if (idx <= numberOfPages()) {
+      pageNumbers.push(idx);
+    }
+  });
+
+  const getLastIdx = pageNumbers.at(-1) + 1;
 
   const handlePageUpdate = (event) => {
     setSelectedNum(event.selected);

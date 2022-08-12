@@ -1,44 +1,45 @@
-import { LandingPageContext } from "./LandingPageContext";
+import { GlobalContext } from "./GlobalContext";
+
 import React, { useContext, useState, createContext } from "react";
 
 export const PaginationContext = createContext(null);
 
 export const PaginationProvider = ({ children }) => {
-  const { pageNum, itemsFromCategory, itemCategory, setPageNum } =
-    useContext(LandingPageContext);
+  const itemData = useContext(GlobalContext);
+  const { getItems } = itemData;
 
-  const [numberClicked, setNumberClicked] = useState(false);
+  // const [numberClicked, setNumberClicked] = useState(false);
+  const [pageNum, setPageNum] = useState([0]);
 
   const productsPerPage = 12;
 
   const pageVisits = pageNum * productsPerPage;
 
-  let numPages = Math.floor(
-    (itemsFromCategory(itemCategory).length - 1) / productsPerPage
-  );
+  // const numberOfPages = (getAllItems.length - 1) / productsPerPage;
 
   const handlePageClick = (e) => {
     setPageNum(e);
-    setNumberClicked(!numberClicked);
+    // setNumberClicked(!numberClicked);
   };
 
-  let categoryPageNumbers = [];
+  // let pageNumbers = [];
 
-  itemsFromCategory(itemCategory).map((x, idx) => {
-    if (idx <= numPages) {
-      categoryPageNumbers.push(idx);
-    }
-  });
+  // getAllItems.map((x, idx) => {
+  //   if (idx <= numberOfPages) {
+  //     pageNumbers.push(idx);
+  //   }
+  // });
 
   return (
     <PaginationContext.Provider
       value={{
         pageVisits,
         productsPerPage,
-        categoryPageNumbers,
-        numberClicked,
+        // pageNumbers,
+        // numberClicked,
         pageNum,
         handlePageClick,
+        // numPages,
         setPageNum,
       }}
     >
