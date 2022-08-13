@@ -20,12 +20,16 @@ const Products = () => {
     getAllItems,
     getCategory,
     getBodyLocation,
-    setGetBodyLocation,
-    setGetCategory,
+    isPriceSorted,
+    setIsPriceSorted,
   } = useContext(FilterContext);
 
   const [dropCategory, setDropCategory] = useState(false);
   const [dropBodyLocation, setDropBodyLocation] = useState(false);
+
+  const refreshPage = () => {
+    window.location.reload();
+  };
 
   return (
     <Wrapper>
@@ -33,8 +37,7 @@ const Products = () => {
         <Categories>
           <Btn
             onClick={() => {
-              setGetCategory("");
-              setGetBodyLocation("");
+              refreshPage();
             }}
           >
             Reset
@@ -53,7 +56,9 @@ const Products = () => {
                     name="category"
                     value={itemCategories}
                     onChange={(e) => handleCategory(e)}
-                    onClick={() => setPageNum(0)}
+                    onClick={() => {
+                      setPageNum(0);
+                    }}
                   />
                   {itemCategories}
                 </li>
@@ -73,14 +78,20 @@ const Products = () => {
                     name="bodLocation"
                     value={bodLoca}
                     onChange={(e) => handleBodyLocation(e)}
-                    onClick={() => setPageNum(0)}
+                    onClick={() => {
+                      setPageNum(0);
+                    }}
                   />
                   {bodLoca}
                 </li>
               );
             })}
           </Drop>
+          <h2 onClick={() => setIsPriceSorted(!isPriceSorted)}>
+            {isPriceSorted ? <p>Sort by Price ⮟</p> : <p>Sort by Price ⮝</p>}
+          </h2>
         </Categories>
+
         {getCategory.length < 1 && getBodyLocation.length < 1
           ? getAllItems
               .slice(pageVisits, pageVisits + productsPerPage)
@@ -105,6 +116,8 @@ const Wrapper = styled.div`
   justify-content: center;
   gap: 2rem;
   align-items: center;
+  padding: 0;
+  margin: 0;
 `;
 
 const Drop = styled.div`
@@ -158,7 +171,8 @@ const CardGrid = styled.div`
     "Menu . . . .";
   gap: 30px;
   padding: 0 6% 0 1%;
-  margin-top: 2rem;
+  margin-top: 3rem;
+
   width: 100vw;
 `;
 

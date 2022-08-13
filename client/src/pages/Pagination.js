@@ -6,7 +6,7 @@ import { FilterContext } from "../services/FilterContext";
 import { GlobalContext } from "../services/GlobalContext";
 
 const Pagination = () => {
-  const { handlePageClick, productsPerPage, setPageNum, pageNum } =
+  const { handlePageClick, productsPerPage, pageNum } =
     useContext(PaginationContext);
 
   const { filterAllSeletions } = useContext(FilterContext);
@@ -15,6 +15,7 @@ const Pagination = () => {
 
   const { getItems } = itemData;
   const getAllItems = Object.values(getItems);
+
   const [selectedNum, setSelectedNum] = useState();
 
   let pageNumbers = [];

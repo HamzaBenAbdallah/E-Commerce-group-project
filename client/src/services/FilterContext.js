@@ -10,10 +10,11 @@ export const FilterProviders = ({ children }) => {
 
   const [getCategory, setGetCategory] = useState([]);
   const [getBodyLocation, setGetBodyLocation] = useState([]);
-  const [resetBtn, setResetBtn] = useState(false);
+  const [isPriceSorted, setIsPriceSorted] = useState(false);
 
   const handleCategory = (data) => {
     const newVal = [...getCategory];
+    console.log(data.target);
     if (data.target.checked === true) {
       newVal.push(data.target.value);
     } else if (data.target.checked === false) {
@@ -34,18 +35,21 @@ export const FilterProviders = ({ children }) => {
     setGetBodyLocation(bodyValue);
   };
 
-  // const handleBrands = (data) => {
-  //   const bodyValue = [...getBodyLocation];
-  //   if (data.target.checked === true) {
-  //     bodyValue.push(data.target.value);
-  //   } else if (data.target.checked === false) {
-  //     const removeIdx = bodyValue.indexOf(data.target.value);
-  //     bodyValue.splice(removeIdx, 1);
-  //   }
-  //   setGetBodyLocation(bodyValue);
-  // };
-
   const getAllItems = Object.values(getItems);
+
+  if (isPriceSorted === true) {
+    getAllItems.sort((lowestPrice, highestPrice) => {
+      const newLowestPrice = Number(lowestPrice.price.substring(1));
+      const newHighestPrice = Number(highestPrice.price.substring(1));
+      return newLowestPrice - newHighestPrice;
+    });
+  } else if (isPriceSorted === false) {
+    getAllItems.sort((lowestPrice, highestPrice) => {
+      const newLowestPrice = Number(lowestPrice.price.substring(1));
+      const newHighestPrice = Number(highestPrice.price.substring(1));
+      return newHighestPrice - newLowestPrice;
+    });
+  }
 
   const filterAllSeletions = getAllItems.filter((item) => {
     if (getCategory.includes(item.category) && getBodyLocation.length < 1) {
@@ -74,6 +78,20 @@ export const FilterProviders = ({ children }) => {
     }
   });
 
+  if (filterAllSeletions.length > 0 && isPriceSorted === true) {
+    filterAllSeletions.sort((lowestPrice, highestPrice) => {
+      const newLowestPrice = Number(lowestPrice.price.substring(1));
+      const newHighestPrice = Number(highestPrice.price.substring(1));
+      return newLowestPrice - newHighestPrice;
+    });
+  } else if (filterAllSeletions.length > 0 && isPriceSorted === false) {
+    filterAllSeletions.sort((lowestPrice, highestPrice) => {
+      const newLowestPrice = Number(lowestPrice.price.substring(1));
+      const newHighestPrice = Number(highestPrice.price.substring(1));
+      return newHighestPrice - newLowestPrice;
+    });
+  }
+
   return (
     <FilterContext.Provider
       value={{
@@ -85,6 +103,8 @@ export const FilterProviders = ({ children }) => {
         getBodyLocation,
         setGetBodyLocation,
         setGetCategory,
+        isPriceSorted,
+        setIsPriceSorted,
       }}
     >
       {children}
