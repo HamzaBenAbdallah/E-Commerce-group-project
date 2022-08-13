@@ -28,29 +28,8 @@ const Header = () => {
         </Link>
         <Menu>
           <Link to="/products">
-            <Item
-            // onClick={() => {
-            //   handleClick("");
-            // }}
-            >
-              Products
-            </Item>
+            <Item>Products</Item>
           </Link>
-          {/* <ol>
-            {uniqueCategories.map((clickedCategory, idx) => {
-              return (
-                <Link to="/products" key={idx}>
-                  <li
-                    onClick={() => {
-                      handleClick(clickedCategory);
-                    }}
-                  >
-                    {clickedCategory}
-                  </li>
-                </Link>
-              );
-            })}
-          </ol> */}
         </Menu>
       </Container>
       <Container>
