@@ -33,8 +33,11 @@ const Card = ({ item }) => {
       <Separator />
       <Shopping>
         <Price>{item.price}</Price>
+        <Purchase onClick={(event) => addProductToCart(item._id, event, -1)}>
+          -
+        </Purchase>
         <Purchase onClick={(event) => addProductToCart(item._id, event, 1)}>
-          + Add to cart
+          +
         </Purchase>
       </Shopping>
     </NavLink>
