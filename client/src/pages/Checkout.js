@@ -21,14 +21,13 @@ const Checkout = () => {
   const [formData, setFormData] = useState(initialState);
   const [itemsData, setItemsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { getItems } = useContext(GlobalContext);
+  const { getItems, cartTotal } = useContext(GlobalContext);
   const itemsList = Object.values(getItems);
 
   const navigate = useNavigate();
 
-  const subTotal = 0;
   const shipping = 15;
-  const total = subTotal + shipping;
+  const total = (cartTotal + shipping).toFixed(2);
 
   const handleChange = ({ currentTarget: input }) => {
     setFormData({
@@ -199,7 +198,7 @@ const Checkout = () => {
         <Payment>
           <PaymentItem>
             <PaymentTitle>SUBTOTAL</PaymentTitle>
-            <Price>${subTotal}</Price>
+            <Price>${Number(cartTotal.toFixed(2))}</Price>
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>SHIPPING</PaymentTitle>
@@ -207,7 +206,7 @@ const Checkout = () => {
           </PaymentItem>
           <PaymentItem>
             <PaymentTitle>Total</PaymentTitle>
-            <Price>${total}</Price>
+            <Price>${Number(total)}</Price>
           </PaymentItem>
         </Payment>
       </Cart>
