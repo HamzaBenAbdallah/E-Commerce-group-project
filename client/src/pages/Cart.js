@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { GlobalContext } from "../services/GlobalContext";
@@ -6,8 +6,7 @@ import ItemsInCart from "../components/itemsInCart";
 import { NavLink } from "react-router-dom";
 
 const Cart = () => {
-  const [inputValue, setInputValue] = useState();
-  const { cart, cartTotal, setCartTotal } = useContext(GlobalContext);
+  const { cart, cartTotal } = useContext(GlobalContext);
 
   if (cart.length > 0) {
     return (

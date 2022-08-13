@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 
 const ProductDescription = () => {
-  const { cart, setCart, addProductToCart } = useContext(GlobalContext);
+  const { cart, addProductToCart } = useContext(GlobalContext);
   const [productInformation, setProductInformation] = useState();
   const [quantityToAdd, setQuantityToAdd] = useState(1);
 
