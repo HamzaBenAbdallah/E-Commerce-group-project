@@ -21,7 +21,7 @@ const Checkout = () => {
   const [formData, setFormData] = useState(initialState);
   const [itemsData, setItemsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { getItems, cartTotal } = useContext(GlobalContext);
+  const { getItems, cartTotal, setCart } = useContext(GlobalContext);
   const itemsList = Object.values(getItems);
 
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const Checkout = () => {
   const items = JSON.parse(localStorage.getItem("cart"));
   let itemIds = [];
   items?.map((item) => {
-    itemIds.push(Object.keys(item)[0]);
+    return itemIds.push(Object.keys(item)[0]);
   });
 
   useEffect(() => {
@@ -82,7 +82,8 @@ const Checkout = () => {
 
     setFormData(initialState);
     setItemsData([]);
-    localStorage.removeItem("cart");
+    localStorage.clear();
+    setCart([]);
     navigate("/confirmation");
   };
 

@@ -20,19 +20,14 @@ export const GlobalProvider = ({ children }) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const addProductToCart = async (
-    id,
-    event,
-    quantityToAdd,
-    productInformation
-  ) => {
+  const addProductToCart = async (id, event, quantityToAdd) => {
     event.preventDefault();
     let itemsObject = { [id]: quantityToAdd };
     if (cart?.filter((item) => item[id]).length > 0) {
-      let indexOfItem = await cart.findIndex((item) => item[id]);
-      await setCart([...cart], (cart[indexOfItem][id] += quantityToAdd));
+      let indexOfItem = cart.findIndex((item) => item[id]);
+      setCart([...cart], (cart[indexOfItem][id] += quantityToAdd));
     } else if (cart.filter((item) => item[id]).length === 0) {
-      await setCart([...cart, itemsObject]);
+      setCart([...cart, itemsObject]);
     }
   };
 
@@ -118,17 +113,17 @@ export const GlobalProvider = ({ children }) => {
 
   const calculateCartTotal = async () => {
     if (cart.length >= 1) {
-      const allItems = await Object.values(getItems);
-      let idsOfItemsInCart = await cart?.map((object) =>
+      const allItems = Object.values(getItems);
+      let idsOfItemsInCart = cart?.map((object) =>
         parseInt(Object.keys(object)[0])
       );
       if (idsOfItemsInCart.length >= 1) {
-        let itemsIncart = await idsOfItemsInCart?.map((id, index) => {
+        let itemsIncart = idsOfItemsInCart?.map((id, index) => {
           return allItems?.filter((item) => {
             return item._id == parseInt(id);
           })[0];
         });
-        let totals = await cart?.map((object, index) => {
+        let totals = cart?.map((object, index) => {
           let quantity = object[parseInt(idsOfItemsInCart[index])]; //w
           let prices = itemsIncart[index]?.price.substr(1);
           let total = quantity * prices;
@@ -138,9 +133,6 @@ export const GlobalProvider = ({ children }) => {
       }
     }
   };
-
-  console.log("cart", cart);
-  console.log("cartTotal", cartTotal);
 
   //This function runs every time the cart changes to find if we wanted to remove an item from our cart
   useEffect(() => {

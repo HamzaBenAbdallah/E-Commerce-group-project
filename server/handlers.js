@@ -133,6 +133,17 @@ export const createNewOrder = async (req, res) => {
     // Get the data from the request body
     const { order } = req.body;
 
+    // Update item quantity in the database
+    order.itemsData.forEach(async (item) => {
+      const itemId = item._id;
+      const itemQuantity = item.quantity;
+      const itemData = await db.collection("items").findOne({ _id: itemId });
+      const newQuantity = itemData.numInStock - itemQuantity;
+      await db
+        .collection("items")
+        .updateOne({ _id: itemId }, { $set: { numInStock: newQuantity } });
+    });
+
     // Insert the data into the database
     const result = await ordersDb.insertOne(order);
 

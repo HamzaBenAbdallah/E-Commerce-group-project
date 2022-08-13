@@ -1,11 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import styled from "styled-components";
 import { GlobalContext } from "../services/GlobalContext";
 
-const ItemsInCart = ({ currentItem, index, id }) => {
+const ItemsInCart = ({ currentItem, id }) => {
   const {
     cart,
-    setCart,
     removeItemFromCart,
     increaseQuantityInCart,
     decreaseQuantityInCart,
@@ -16,18 +14,17 @@ const ItemsInCart = ({ currentItem, index, id }) => {
     fetch(`/products/${id}`)
       .then((response) => response.json())
       .then((data) => setItemInformation(data.data[0]));
-  }, [cart]);
+  }, [cart, id]);
 
   if (itemInformation) {
     let price = Number(itemInformation.price.substring(1));
     let quantity = currentItem[id];
-    // price = price.toFixed(2);
 
     return (
       <tr>
         <td>
           {" "}
-          <img src={itemInformation.imageSrc}></img>
+          <img src={itemInformation.imageSrc} alt="item"></img>
         </td>
         <td>
           {" "}
@@ -68,25 +65,3 @@ const ItemsInCart = ({ currentItem, index, id }) => {
 };
 
 export default ItemsInCart;
-const ProductWrapper = styled.div`
-  width: 100vw;
-  height: 400px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid black;
-
-  img {
-    width: 80px;
-    height: 80px;
-  }
-
-  button {
-    height: 20px;
-  }
-
-  .quantity {
-    text-align: center;
-  }
-`;
