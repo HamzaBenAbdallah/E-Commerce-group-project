@@ -145,3 +145,22 @@ export const createNewOrder = async (req, res) => {
     res.status(500).json({ status: 500, Error: "Internal server error" });
   }
 };
+
+export const getOrder = async (req, res) => {
+  try {
+    const client = new MongoClient(MONGO_URI, options);
+    await client.connect();
+    const db = client.db("ecommerce");
+
+    const customerData = await db.collection("orders").find().toArray();
+
+    return (
+      res
+        .status(200)
+        .json({ status: 200, customerData, message: "Order Received" }),
+      client.close()
+    );
+  } catch (err) {
+    res.status(404).json({ status: 404, Error: "No purchases made" });
+  }
+};

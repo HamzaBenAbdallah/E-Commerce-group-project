@@ -15,6 +15,8 @@ export const GlobalProvider = ({ children }) => {
 
   const [getItems, setGetItems] = useState([]);
   const [getCompany, setGetCompany] = useState();
+  const [customerData, setCustomerData] = useState([]);
+  const [boughtItem, setBoughtItem] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -90,6 +92,18 @@ export const GlobalProvider = ({ children }) => {
       });
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch("/confirmed-purchased")
+      .then((res) => res.json())
+      .then((customer) => {
+        setCustomerData(customer?.customerData[0]?.formData);
+        setBoughtItem(customer?.customerData[0]?.itemsData);
+      });
+    setIsLoading(false);
+  }, []);
+
   useEffect(() => {
     checkCart();
   }, []);
@@ -147,6 +161,8 @@ export const GlobalProvider = ({ children }) => {
         decreaseQuantityInCart,
         cartTotal,
         setCartTotal,
+        customerData,
+        boughtItem,
       }}
     >
       {children}

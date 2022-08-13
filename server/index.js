@@ -1,7 +1,12 @@
 "use strict";
 import express from "express";
 import morgan from "morgan";
-import { createNewOrder, getItems, getProductDescription } from "./handlers.js";
+import {
+  createNewOrder,
+  getItems,
+  getProductDescription,
+  getOrder,
+} from "./handlers.js";
 
 const PORT = 4000;
 
@@ -29,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.get("/get-items", getItems);
 app.get("/products/:product_id", getProductDescription);
 app.post("/checkout", createNewOrder);
-
+app.get("/confirmed-purchased", getOrder);
 //cart endpoints//
 // app.post("/purchase", addPurchase);
 // app.put("/items/:itemId", updateQuantity);

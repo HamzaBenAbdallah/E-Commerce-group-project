@@ -21,8 +21,12 @@ const Front = () => {
       <Info>
         <Title>Featured Products</Title>
         <Featured>
-          {productsInStock.slice(0, 5).map((item) => {
-            return <Card key={item.itemID} item={item} />;
+          {productsInStock.slice(0, 5).map((item, idx) => {
+            return (
+              <div key={idx}>
+                <Card item={item} />
+              </div>
+            );
           })}
         </Featured>
         <Link to="/products">

@@ -1,78 +1,108 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { LandingPageContext } from "../services/LandingPageContext";
-import { GlobalContext } from "../services/GlobalContext";
+import { PaginationContext } from "../services/PaginateContext";
+import { FilterContext } from "../services/FilterContext";
 import Card from "../components/Card";
 import Pagination from "./Pagination";
 
 const Products = () => {
+  const { uniqueCategories, uniqueBodyLocation } =
+    useContext(LandingPageContext);
+
+  const { pageVisits, productsPerPage, setPageNum } =
+    useContext(PaginationContext);
+
   const {
-    uniqueCategories,
-    handleClick,
-    itemsFromCategory,
-    pageVisits,
-    productsPerPage,
-    itemCategory,
-    uniqueBodyLocation,
-    companyNumber,
-    pageNum,
-  } = useContext(LandingPageContext);
+    handleCategory,
+    handleBodyLocation,
+    filterAllSeletions,
+    getAllItems,
+    getCategory,
+    getBodyLocation,
+    isPriceSorted,
+    setIsPriceSorted,
+  } = useContext(FilterContext);
 
-  const { getCompany, getItems } = useContext(GlobalContext);
-  // console.log(`getCompany:`, getCompany);
-  // console.log(`getItems:`, getItems);
-  // let arr = [];
-
-  const [dropDownClicked, setDropDownClicked] = useState(false);
   const [dropCategory, setDropCategory] = useState(false);
-  const [dropCompany, setDropCompany] = useState(false);
-  const [pickedFilters, setPickedFilters] = useState([]);
+  const [dropBodyLocation, setDropBodyLocation] = useState(false);
 
-  // console.log(`itemsFromCategory:`, itemsFromCategory(""));
-  const handleChange = (data) => {
-    console.log(` target:`, data.target);
-    console.log(` value:`, data.target.value);
-    console.log(`isChecked:`, data.target.checked);
-    setPickedFilters((prev) => prev + ", " + data.target.value);
-    // setPickedFilters();
+  const refreshPage = () => {
+    window.location.reload();
   };
-
-  console.log(`pickedFilters:`, pickedFilters);
 
   return (
     <Wrapper>
       <CardGrid>
         <Categories>
-          <h2 onClick={() => setDropDownClicked(!dropDownClicked)}>
-            {dropDownClicked ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
+          <Btn
+            onClick={() => {
+              refreshPage();
+            }}
+          >
+            Reset
+          </Btn>
+
+          <h2 onClick={() => setDropCategory(!dropCategory)}>
+            {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
           </h2>
-          <Drop picked={dropDownClicked}>
+          <Drop picked={dropCategory}>
             {uniqueCategories.map((itemCategories, idx) => {
               return (
-                <li
-                  key={idx}
-                  onClick={() => {
-                    handleClick(itemCategories);
-                  }}
-                >
+                <li key={idx}>
                   <input
                     type="checkbox"
                     id="category"
                     name="category"
                     value={itemCategories}
-                    onChange={(e) => handleChange(e)}
+                    onChange={(e) => handleCategory(e)}
+                    onClick={() => {
+                      setPageNum(0);
+                    }}
                   />
                   {itemCategories}
                 </li>
               );
             })}
           </Drop>
+          <h2 onClick={() => setDropBodyLocation(!dropBodyLocation)}>
+            {dropBodyLocation ? <p>Body Location ⮟</p> : <p>Body Location ⮞</p>}
+          </h2>
+          <Drop picked={dropBodyLocation}>
+            {uniqueBodyLocation.map((bodLoca, idx) => {
+              return (
+                <li key={idx}>
+                  <input
+                    type="checkbox"
+                    id="bodLocation"
+                    name="bodLocation"
+                    value={bodLoca}
+                    onChange={(e) => handleBodyLocation(e)}
+                    onClick={() => {
+                      setPageNum(0);
+                    }}
+                  />
+                  {bodLoca}
+                </li>
+              );
+            })}
+          </Drop>
+          <h2 onClick={() => setIsPriceSorted(!isPriceSorted)}>
+            {isPriceSorted ? <p>Sort by Price ⮟</p> : <p>Sort by Price ⮝</p>}
+          </h2>
         </Categories>
-        {itemsFromCategory(itemCategory)
-          .slice(pageVisits, pageVisits + productsPerPage)
-          .map((item) => {
-            return <Card key={item.itemID} item={item} />;
-          })}
+
+        {getCategory.length < 1 && getBodyLocation.length < 1
+          ? getAllItems
+              .slice(pageVisits, pageVisits + productsPerPage)
+              .map((item, idx) => {
+                return <Card key={idx} item={item} />;
+              })
+          : filterAllSeletions
+              .slice(pageVisits, pageVisits + productsPerPage)
+              .map((item, idx) => {
+                return <Card key={idx} item={item} />;
+              })}
       </CardGrid>
       <Pagination />
     </Wrapper>
@@ -86,6 +116,8 @@ const Wrapper = styled.div`
   justify-content: center;
   gap: 2rem;
   align-items: center;
+  padding: 0;
+  margin: 0;
 `;
 
 const Drop = styled.div`
@@ -97,14 +129,13 @@ const Categories = styled.ul`
   display: flex;
   flex-direction: column;
   list-style-type: none;
-
   grid-area: Menu;
 
   h2 {
     display: flex;
     flex-direction: row;
     padding-left: 20px;
-
+    cursor: pointer;
     border: 2px solid red;
   }
 
@@ -113,7 +144,6 @@ const Categories = styled.ul`
     border: 2px solid #0000a3;
     align-items: center;
     padding-left: 20px;
-    text-align: center;
     width: 100%;
     height: 35px;
     cursor: pointer;
@@ -133,6 +163,7 @@ const Company = styled.div`
 const CardGrid = styled.div`
   display: grid;
   grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr;
+
   grid-template-areas:
     "Menu . . . ."
     "Menu . . . ."
@@ -140,7 +171,19 @@ const CardGrid = styled.div`
     "Menu . . . .";
   gap: 30px;
   padding: 0 6% 0 1%;
-  margin-top: 2rem;
+  margin-top: 3rem;
+
+  width: 100vw;
+`;
+
+const Btn = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
+  width: 50%;
+  margin-bottom: 1rem;
+  /* border: 2px solid blue; */
 `;
 
 export default Products;
