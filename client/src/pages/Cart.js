@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-
 import { GlobalContext } from "../services/GlobalContext";
 import ItemsInCart from "../components/itemsInCart";
 import { NavLink } from "react-router-dom";

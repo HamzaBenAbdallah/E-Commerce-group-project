@@ -41,7 +41,6 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin: 2rem 0;
   font-family: sans-serif;
   gap: 2rem;
   height: 100vh;

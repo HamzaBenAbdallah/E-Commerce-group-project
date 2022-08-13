@@ -54,6 +54,10 @@ const Wrapper = styled.div`
   font-family: sans-serif;
   border-bottom: 2px solid #ccc;
   --height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
 `;
 
 const Link = styled(NavLink)`

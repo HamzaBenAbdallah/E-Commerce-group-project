@@ -15,7 +15,6 @@ export const GlobalProvider = ({ children }) => {
 
   const [getItems, setGetItems] = useState([]);
   const [getCompany, setGetCompany] = useState();
-
   const [isLoading, setIsLoading] = useState(true);
 
   const addProductToCart = async (id, event, quantityToAdd) => {

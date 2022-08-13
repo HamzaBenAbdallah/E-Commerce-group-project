@@ -62,7 +62,8 @@ const Paginate = styled.div`
   list-style-type: none;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  padding: 0 50px;
+
   padding-bottom: 20px;
 
   .paginateStyle {
@@ -71,7 +72,8 @@ const Paginate = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 500px;
+    gap: 5px;
+    width: 1000px;
 
     .selected {
       color: ${(props) => (props.sameNum ? "white" : "black")};
@@ -83,7 +85,7 @@ const Paginate = styled.div`
       justify-content: center;
       text-align: center;
       cursor: pointer;
-      padding: 5px 5px;
+      padding: 5px 15px;
       border-radius: 5px;
     }
     li:hover {

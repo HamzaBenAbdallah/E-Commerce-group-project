@@ -33,12 +33,15 @@ const Card = ({ item }) => {
       <Separator />
       <Shopping>
         <Price>{item.price}</Price>
-        <Purchase onClick={(event) => addProductToCart(item._id, event, -1)}>
-          -
-        </Purchase>
-        <Purchase onClick={(event) => addProductToCart(item._id, event, 1)}>
-          +
-        </Purchase>
+        <Cart>
+          <Purchase onClick={(event) => addProductToCart(item._id, event, -1)}>
+            -
+          </Purchase>
+          <>🛒</>
+          <Purchase onClick={(event) => addProductToCart(item._id, event, 1)}>
+            +
+          </Purchase>
+        </Cart>
       </Shopping>
     </NavLink>
   );
@@ -51,6 +54,7 @@ const NavLink = styled(Link)`
   justify-content: center;
   align-items: center;
   text-decoration: none;
+  color: black;
   min-width: 250px;
   box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.3);
   line-height: 1.25rem;
@@ -99,15 +103,18 @@ const Description = styled.p`
 const Shopping = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0 1rem;
   width: 100%;
   height: 2rem;
   margin-top: 1rem;
 `;
-
+const Cart = styled.div``;
 const Price = styled.div``;
 
-const Purchase = styled.div``;
+const Purchase = styled.button`
+  margin: 0;
+`;
 
 const Separator = styled.div`
   width: 100%;
