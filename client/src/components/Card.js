@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 
@@ -54,11 +54,12 @@ const NavLink = styled(Link)`
   justify-content: center;
   align-items: center;
   text-decoration: none;
+  text-align: center;
   color: black;
+  border-radius: 5px;
   min-width: 250px;
   box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.3);
-  line-height: 1.25rem;
-  font-family: sans-serif;
+  line-height: 1.5rem;
   transition: transform 0.25s ease-in-out;
   opacity: ${(props) => (props.opacity ? 0.2 : 1)};
   pointer-events: ${(props) => (props.quantity ? "none" : "")};
@@ -86,8 +87,7 @@ const Info = styled.div`
 `;
 
 const Name = styled.p`
-  width: 28ch;
-  text-align: center;
+  margin: 0 15px;
   font-weight: 600;
   /** The title will on show 2 lines */
   overflow: hidden;

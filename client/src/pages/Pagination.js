@@ -68,28 +68,35 @@ const Paginate = styled.div`
 
   .paginateStyle {
     font-weight: bold;
-    border: 2px solid red;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    gap: 5px;
-    width: 1000px;
+    gap: 10px;
+    font-size: 1rem;
+    width: 500px;
+    border-radius: 15px;
+    cursor: pointer;
+
+    li:hover {
+      background-color: #ccc;
+    }
 
     .selected {
       color: ${(props) => (props.sameNum ? "white" : "black")};
       background: ${(props) => (props.sameNum ? "#0000a3" : "white")};
     }
-
-    li {
-      display: inline;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-      padding: 5px 15px;
-      border-radius: 5px;
-    }
-    li:hover {
-      background-color: #ccc;
-    }
   }
 `;
+
+// li {
+//   display: inline;
+//   justify-content: center;
+//   text-align: center;
+//   cursor: pointer;
+//   /* margin: 5px 10px; */
+//   padding: 5px 10px;
+//   border-radius: 5px;
+// }
+// li:hover {
+//   background-color: #ccc;
+// }

@@ -16,6 +16,7 @@ export const GlobalProvider = ({ children }) => {
   const [getItems, setGetItems] = useState([]);
   const [getCompany, setGetCompany] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingItems, setLoadingItems] = useState(false);
 
   const addProductToCart = async (id, event, quantityToAdd) => {
     event.preventDefault();
@@ -70,7 +71,8 @@ export const GlobalProvider = ({ children }) => {
     fetch("/get-items")
       .then((res) => res.json())
       .then((itemData) => {
-        return setGetItems(itemData.items);
+        setGetItems(itemData.items);
+        setLoadingItems(true);
       });
     setIsLoading(false);
   }, []);
@@ -138,6 +140,7 @@ export const GlobalProvider = ({ children }) => {
         increaseQuantityInCart,
         decreaseQuantityInCart,
         cartTotal,
+        loadingItems,
         setCartTotal,
       }}
     >

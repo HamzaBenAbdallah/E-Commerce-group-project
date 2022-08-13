@@ -2,8 +2,10 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { LandingPageContext } from "../services/LandingPageContext";
 import { PaginationContext } from "../services/PaginateContext";
+import { GlobalContext } from "../services/GlobalContext";
 import { FilterContext } from "../services/FilterContext";
 import Card from "../components/Card";
+
 import Pagination from "./Pagination";
 
 const Products = () => {
@@ -12,6 +14,8 @@ const Products = () => {
 
   const { pageVisits, productsPerPage, setPageNum } =
     useContext(PaginationContext);
+
+  const { loadingItems } = useContext(GlobalContext);
 
   const {
     handleCategory,
@@ -33,78 +37,85 @@ const Products = () => {
 
   return (
     <Wrapper>
-      <CardGrid>
-        <Categories>
-          <Btn
-            onClick={() => {
-              refreshPage();
-            }}
-          >
-            Reset
-          </Btn>
+      {loadingItems ? (
+        <>
+          <CardGrid>
+            <Categories>
+              <Btn
+                onClick={() => {
+                  refreshPage();
+                }}
+              >
+                Reset ↻
+              </Btn>
+              <Container>
+                <h2 onClick={() => setDropCategory(!dropCategory)}>
+                  {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
+                </h2>
+                <Drop picked={dropCategory}>
+                  {uniqueCategories.map((itemCategories, idx) => {
+                    return (
+                      <label key={idx}>
+                        <input
+                          onChange={(e) => handleCategory(e)}
+                          type="checkbox"
+                          name="category"
+                          value={itemCategories}
+                        />
+                        <span>{itemCategories}</span>
+                      </label>
+                    );
+                  })}
+                </Drop>
+                <h2 onClick={() => setDropBodyLocation(!dropBodyLocation)}>
+                  {dropBodyLocation ? (
+                    <p>Body Location ⮟</p>
+                  ) : (
+                    <p>Body Location ⮞</p>
+                  )}
+                </h2>
+                <Drop picked={dropBodyLocation}>
+                  {uniqueBodyLocation.map((bodLoca, idx) => {
+                    return (
+                      <label key={idx}>
+                        <input
+                          onChange={(e) => handleBodyLocation(e)}
+                          type="checkbox"
+                          name="bodLocation"
+                          value={bodLoca}
+                        />
+                        <span>{bodLoca}</span>
+                      </label>
+                    );
+                  })}
+                </Drop>
+                <h2 onClick={() => setIsPriceSorted(!isPriceSorted)}>
+                  {isPriceSorted ? (
+                    <p>Sort by Price ⮟</p>
+                  ) : (
+                    <p>Sort by Price ⮝</p>
+                  )}
+                </h2>
+              </Container>
+            </Categories>
 
-          <h2 onClick={() => setDropCategory(!dropCategory)}>
-            {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
-          </h2>
-          <Drop picked={dropCategory}>
-            {uniqueCategories.map((itemCategories, idx) => {
-              return (
-                <li key={idx}>
-                  <input
-                    type="checkbox"
-                    id="category"
-                    name="category"
-                    value={itemCategories}
-                    onChange={(e) => handleCategory(e)}
-                    onClick={() => {
-                      setPageNum(0);
-                    }}
-                  />
-                  {itemCategories}
-                </li>
-              );
-            })}
-          </Drop>
-          <h2 onClick={() => setDropBodyLocation(!dropBodyLocation)}>
-            {dropBodyLocation ? <p>Body Location ⮟</p> : <p>Body Location ⮞</p>}
-          </h2>
-          <Drop picked={dropBodyLocation}>
-            {uniqueBodyLocation.map((bodLoca, idx) => {
-              return (
-                <li key={idx}>
-                  <input
-                    type="checkbox"
-                    id="bodLocation"
-                    name="bodLocation"
-                    value={bodLoca}
-                    onChange={(e) => handleBodyLocation(e)}
-                    onClick={() => {
-                      setPageNum(0);
-                    }}
-                  />
-                  {bodLoca}
-                </li>
-              );
-            })}
-          </Drop>
-          <h2 onClick={() => setIsPriceSorted(!isPriceSorted)}>
-            {isPriceSorted ? <p>Sort by Price ⮟</p> : <p>Sort by Price ⮝</p>}
-          </h2>
-        </Categories>
-
-        {getCategory.length < 1 && getBodyLocation.length < 1
-          ? getAllItems
-              .slice(pageVisits, pageVisits + productsPerPage)
-              .map((item, idx) => {
-                return <Card key={idx} item={item} />;
-              })
-          : filterAllSeletions
-              .slice(pageVisits, pageVisits + productsPerPage)
-              .map((item, idx) => {
-                return <Card key={idx} item={item} />;
-              })}
-      </CardGrid>
-      <Pagination />
+            {getCategory.length < 1 && getBodyLocation.length < 1
+              ? getAllItems
+                  .slice(pageVisits, pageVisits + productsPerPage)
+                  .map((item, idx) => {
+                    return <Card key={idx} item={item} />;
+                  })
+              : filterAllSeletions
+                  .slice(pageVisits, pageVisits + productsPerPage)
+                  .map((item, idx) => {
+                    return <Card key={idx} item={item} />;
+                  })}
+          </CardGrid>
+          <Pagination />
+        </>
+      ) : (
+        <p>Loading...</p>
+      )}
     </Wrapper>
   );
 };
@@ -124,6 +135,11 @@ const Drop = styled.div`
   display: ${(props) => (props.picked ? "block" : "none")};
 `;
 
+const Container = styled.div`
+  border: 2px solid #001d6e;
+  border-radius: 5px;
+`;
+
 const Categories = styled.ul`
   width: 100%;
   display: flex;
@@ -134,35 +150,43 @@ const Categories = styled.ul`
   h2 {
     display: flex;
     flex-direction: row;
-    padding-left: 20px;
+    padding: 10px 0 10px 20px;
     cursor: pointer;
-    border: 2px solid red;
+    color: white;
+    background-color: #001d6e;
+    border-bottom: 2px solid white;
+
+    /* border: 2px solid red; */
+    font-size: 1.3rem;
+
+    :last-child {
+      border-bottom: none;
+    }
+    :hover {
+      background-color: #2a4991;
+      color: white;
+    }
   }
 
-  li {
+  label {
     display: flex;
-    border: 2px solid #0000a3;
+    align-self: center;
     align-items: center;
     padding-left: 20px;
-    width: 100%;
     height: 35px;
     cursor: pointer;
+    margin: 0 10px;
+    border-bottom: 1px solid #ccc;
+
+    :hover {
+      background-color: #e7e7e7;
+    }
   }
-`;
-
-const Category = styled.div`
-  display: ${(props) => (props.picked ? "block" : "none")};
-`;
-
-const Company = styled.div`
-  height: 300px;
-  overflow: scroll;
-  display: ${(props) => (props.selected ? "block" : "none")};
 `;
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 0.6fr 0.8fr 0.8fr 0.8fr 0.8fr;
 
   grid-template-areas:
     "Menu . . . ."
@@ -173,7 +197,7 @@ const CardGrid = styled.div`
   padding: 0 6% 0 1%;
   margin-top: 3rem;
 
-  width: 100vw;
+  width: 90vw;
 `;
 
 const Btn = styled.button`
@@ -183,7 +207,14 @@ const Btn = styled.button`
   align-self: center;
   width: 50%;
   margin-bottom: 1rem;
-  /* border: 2px solid blue; */
+  background-color: #767676;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 5px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
 `;
 
 export default Products;
