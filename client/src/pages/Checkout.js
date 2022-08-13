@@ -21,6 +21,7 @@ const Checkout = () => {
   const [formData, setFormData] = useState(initialState);
   const [itemsData, setItemsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingPurchase, setLoadingPurchase] = useState(false);
   const { getItems, cartTotal, setCart } = useContext(GlobalContext);
   const itemsList = Object.values(getItems);
 
@@ -66,6 +67,7 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoadingPurchase(true);
     const order = {
       formData,
       itemsData,
@@ -80,11 +82,13 @@ const Checkout = () => {
       body: JSON.stringify({ order }),
     });
 
-    setFormData(initialState);
-    setItemsData([]);
-    localStorage.clear();
-    setCart([]);
-    navigate("/confirmation");
+    setTimeout(() => {
+      setFormData(initialState);
+      localStorage.clear();
+      setItemsData([]);
+      setCart([]);
+      navigate("/confirmation");
+    }, 2000);
   };
 
   return (
@@ -179,7 +183,12 @@ const Checkout = () => {
             required
           />
         </InfoContainer>
-        <Button type="submit">CONTINUE TO PAYMENT</Button>
+        {/* <Button type="submit">CONTINUE TO PAYMENT</Button> */}
+        {loadingPurchase ? (
+          <Button type="submit">Loading</Button>
+        ) : (
+          <Button type="submit">CONTINUE TO PAYMENT</Button>
+        )}
       </Buyer>
       <Cart>
         <Items>

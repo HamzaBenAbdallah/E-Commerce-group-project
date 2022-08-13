@@ -1,7 +1,11 @@
 import styled from "styled-components";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../services/GlobalContext";
 
 const Card = ({ item }) => {
+  const { addProductToCart } = useContext(GlobalContext);
+
   return (
     <NavLink
       key={item._id}
@@ -29,7 +33,9 @@ const Card = ({ item }) => {
       <Separator />
       <Shopping>
         <Price>{item.price}</Price>
-        <Purchase>+ Add to cart</Purchase>
+        <Purchase onClick={(event) => addProductToCart(item._id, event, 1)}>
+          + Add to cart
+        </Purchase>
       </Shopping>
     </NavLink>
   );

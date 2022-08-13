@@ -1,23 +1,48 @@
 import styled from "styled-components";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 import { Link } from "react-router-dom";
 
 const Confirmation = () => {
-  const { customerData, boughtItem } = useContext(GlobalContext);
+  const [customerData, setCustomerData] = useState([]);
+  const [boughtItem, setBoughtItem] = useState([]);
+  const [subCost, setSubCost] = useState();
+  // const { customerData, boughtItem } = useContext(GlobalContext);
 
-  let subCost = 0;
+  useEffect(() => {
+    fetch("/confirmed-purchased")
+      .then((res) => res.json())
+      .then((customer) => {
+        setCustomerData(
+          customer.customerData[customer.customerData.length - 1]?.formData
+        );
+        setBoughtItem(
+          customer.customerData[customer.customerData.length - 1]?.itemsData
+        );
+        setSubCost(
+          Number(customer.customerData[customer.customerData.length - 1]?.total)
+        );
+      });
+  }, []);
 
-  boughtItem.forEach((allPurchases) => {
-    const numberCost = Number(allPurchases.price.substring(1));
-    return (subCost += numberCost);
-  });
+  console.log(`subCost:`, typeof subCost);
 
-  const shipAndHand = 10;
-  const totalBeforeTax = subCost + shipAndHand;
-  const gstHst = Number(((subCost + shipAndHand) * 0.05).toFixed(2));
-  const pstRstQst = Number(((subCost + shipAndHand) * 0.09975).toFixed(2));
-  const grandTotal = (totalBeforeTax + gstHst + pstRstQst).toFixed(2);
+  // let subCost = 0;
+
+  // boughtItem.forEach((allPurchases) => {
+  //   const numberCost = Number(allPurchases.price.substring(1));
+  //   return (subCost += numberCost);
+  // });
+
+  // boughtItem.forEach((allPurchases) => {
+  //   setSubCost(Number(allPurchases.price));
+  // });
+
+  // const shipAndHand = 15;
+  const totalBeforeTax = Number((subCost - 15).toFixed(2));
+  const gstHst = Number((subCost * 0.05).toFixed(2));
+  const pstRstQst = Number((subCost * 0.09975).toFixed(2));
+  const grandTotal = (subCost + gstHst + pstRstQst).toFixed(2);
   return (
     <Container>
       <h1>Your order is on it's way!</h1>
@@ -35,7 +60,7 @@ const Confirmation = () => {
         <p>Name: {customerData.firstName}</p>
         {customerData?.apt ? (
           <p>
-            Shipping Address:{customerData.apt}-{customerData.address}
+            Shipping Address: {customerData.apt}-{customerData.address}
           </p>
         ) : (
           <p>Shipping Address: {customerData.address}</p>
@@ -43,7 +68,6 @@ const Confirmation = () => {
       </div>
       <ol>
         {boughtItem.map((purchase) => {
-          console.log(`purchase:`, purchase.name);
           return (
             <summary>
               <li>
@@ -68,9 +92,9 @@ const Confirmation = () => {
         })}
       </ol>
       <Cost>
-        <p>Item(s) subtotal: ${subCost}</p>
-        <p>Shipping and Handling: ${shipAndHand}</p>
-        <p>Total before tax: ${totalBeforeTax}</p>
+        <p>Item(s) subtotal: ${totalBeforeTax}</p>
+        <p>Shipping and Handling: $15</p>
+        <p>Total before tax: ${subCost}</p>
         <p>Estimated GST/HST: ${gstHst}</p>
         <p>Estimated PST/RST/QST: ${pstRstQst}</p>
         <p>Grand Total: ${grandTotal}</p>
