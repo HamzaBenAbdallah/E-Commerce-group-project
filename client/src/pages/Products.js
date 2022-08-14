@@ -34,10 +34,6 @@ const Products = () => {
   const [dropCategory, setDropCategory] = useState(false);
   const [dropBodyLocation, setDropBodyLocation] = useState(false);
 
-  const refreshPage = () => {
-    window.location.reload();
-  };
-
   return (
     <Wrapper>
       {loadingItems ? (
