@@ -16,16 +16,19 @@ const Header = () => {
       .reduce((a, b) => a + b, initialValue);
   }
 
+  console.log(window.location.pathname);
   return (
     <Wrapper>
       <Container>
         <Link to="/">
           <Title>Our Super cool Store Name</Title>
         </Link>
-        <Menu>
-          <Link to="/products">
-            <Item>Products</Item>
-          </Link>
+        <Menu
+          onClick={() => {
+            window.location.href = "/products";
+          }}
+        >
+          <Item>Products</Item>
         </Menu>
       </Container>
       <Container>
