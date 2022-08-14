@@ -23,12 +23,10 @@ const Header = () => {
         <Link to="/">
           <Title>Our Super cool Store Name</Title>
         </Link>
-        <Menu
-          onClick={() => {
-            window.location.href = "/products";
-          }}
-        >
-          <Item>Products</Item>
+        <Menu>
+          <Link reloadDocument to="/products">
+            <Item>Products</Item>
+          </Link>
         </Menu>
       </Container>
       <Container>
