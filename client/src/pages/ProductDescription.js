@@ -9,6 +9,7 @@ const ProductDescription = () => {
   const { cart, addProductToCart } = useContext(GlobalContext);
   const [productInformation, setProductInformation] = useState();
   const [quantityToAdd, setQuantityToAdd] = useState(1);
+  const [matchedItemInCart, setMatchedItemInCart] = useState(false);
 
   let { product_id } = useParams();
   product_id = parseInt(product_id);
@@ -16,8 +17,23 @@ const ProductDescription = () => {
   useEffect(() => {
     fetch(`/products/${product_id}`)
       .then((response) => response.json())
-      .then((data) => setProductInformation(data.data[0]));
+
+      .then((data) => {
+        setProductInformation(data.data[0]);
+      });
   }, [cart]);
+
+  useEffect(() => {
+    if (cart.length >= 1) {
+      cart?.map((cartItem) => {
+        if (Object.keys(cartItem)[0] == product_id) {
+          setMatchedItemInCart(Object.values(cartItem)[0]);
+        }
+      });
+    } else {
+      setMatchedItemInCart(false);
+    }
+  }, [cart, productInformation, quantityToAdd]);
 
   return (
     <>
@@ -36,8 +52,13 @@ const ProductDescription = () => {
               <span className="productId">{`Product #: ${productInformation._id}`}</span>
               <h3 className="price">{productInformation.price}</h3>
             </div>
+            {productInformation.numInStock < 12 ? (
+              <span className="onlyleftInStock">{`Only ${productInformation.numInStock} left in stock!`}</span>
+            ) : (
+              ""
+            )}
 
-            <div className="quantity-selector">
+            <div className="quantitySelector">
               {quantityToAdd <= 1 ? (
                 <button
                   disabled
@@ -60,18 +81,40 @@ const ProductDescription = () => {
                   -
                 </button>
               )}
+
               <span>{quantityToAdd}</span>
 
-              <button
-                onClick={() =>
-                  setQuantityToAdd((prevQuantityToAdd) => prevQuantityToAdd + 1)
-                }
-              >
-                +
-              </button>
+              {quantityToAdd >= productInformation.numInStock ? (
+                <button
+                  disabled
+                  onClick={() =>
+                    setQuantityToAdd(
+                      (prevQuantityToAdd) => prevQuantityToAdd + 1
+                    )
+                  }
+                >
+                  +
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    setQuantityToAdd(
+                      (prevQuantityToAdd) => prevQuantityToAdd + 1
+                    )
+                  }
+                >
+                  +
+                </button>
+              )}
             </div>
 
             <button
+              disabled={
+                matchedItemInCart + quantityToAdd >
+                productInformation?.numInStock
+                  ? true
+                  : false
+              }
               onClick={(event) =>
                 addProductToCart(
                   product_id,
@@ -118,7 +161,7 @@ const Wrapper = styled.div`
     cursor: pointer;
   }
 
-  .quantity-selector button {
+  .quantitySelector button {
     width: 30px;
   }
 
@@ -173,7 +216,7 @@ const Wrapper = styled.div`
     }
   }
 
-  .quantity-selector {
+  .quantitySelector {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -182,5 +225,10 @@ const Wrapper = styled.div`
   }
 
   .pricing_stock {
+  }
+
+  .onlyleftInStock {
+    color: red;
+    background-color: white;
   }
 `;

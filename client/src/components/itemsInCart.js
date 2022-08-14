@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 
 const ItemsInCart = ({ currentItem, id }) => {
@@ -24,7 +25,9 @@ const ItemsInCart = ({ currentItem, id }) => {
       <tr>
         <td>
           {" "}
-          <img src={itemInformation.imageSrc} alt="item"></img>
+          <NavLink to={`/products/${id}`}>
+            <img src={itemInformation.imageSrc} alt="item"></img>
+          </NavLink>
         </td>
         <td>
           {" "}
@@ -35,9 +38,18 @@ const ItemsInCart = ({ currentItem, id }) => {
           <span>{itemInformation.price}</span>
         </td>
         <td>
-          <button onClick={(event) => increaseQuantityInCart(event, id)}>
-            +
-          </button>
+          {quantity >= itemInformation.numInStock ? (
+            <button
+              disabled
+              onClick={(event) => increaseQuantityInCart(event, id)}
+            >
+              +
+            </button>
+          ) : (
+            <button onClick={(event) => increaseQuantityInCart(event, id)}>
+              +
+            </button>
+          )}
           <label>{currentItem[id]}</label>
           <button onClick={(event) => decreaseQuantityInCart(event, id)}>
             -
