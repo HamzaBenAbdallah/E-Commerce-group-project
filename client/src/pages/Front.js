@@ -73,7 +73,9 @@ const Featured = styled.div`
   margin: 2rem 0;
 `;
 
-const Link = styled(NavLink)``;
+const Link = styled(NavLink)`
+  text-decoration: none;
+`;
 
 const Button = styled.button`
   all: unset;
