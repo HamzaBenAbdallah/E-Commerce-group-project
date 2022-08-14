@@ -48,7 +48,9 @@ const Products = () => {
                 reloadDocument
                 to="/products"
                 onClick={() => {
-                  setPageNum(0);
+                  setTimeout(() => {
+                    setPageNum(0);
+                  }, 500);
                 }}
               >
                 Reset ↻
