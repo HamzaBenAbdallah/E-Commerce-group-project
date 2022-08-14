@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { LandingPageContext } from "../services/LandingPageContext";
 import { PaginationContext } from "../services/PaginateContext";
@@ -43,14 +44,15 @@ const Products = () => {
         <>
           <CardGrid>
             <Categories>
-              <Btn
+              <Link
+                reloadDocument
+                to="/products"
                 onClick={() => {
-                  refreshPage();
                   setPageNum(0);
                 }}
               >
                 Reset ↻
-              </Btn>
+              </Link>
               <Container>
                 <h2 onClick={() => setDropCategory(!dropCategory)}>
                   {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
@@ -207,7 +209,7 @@ const CardGrid = styled.div`
   width: 90vw;
 `;
 
-const Btn = styled.button`
+const Link = styled(NavLink)`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -216,6 +218,7 @@ const Btn = styled.button`
   margin-bottom: 1rem;
   background-color: #767676;
   font-size: 1rem;
+  text-decoration: none;
   border-radius: 5px;
   border: none;
   padding: 5px 5px;
