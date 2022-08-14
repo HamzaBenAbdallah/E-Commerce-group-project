@@ -76,7 +76,6 @@ const Paginate = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    /* gap: 10px; */
     font-size: 1rem;
     width: 800px;
     border-radius: 15px;

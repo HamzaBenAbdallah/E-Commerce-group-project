@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 
@@ -90,7 +90,6 @@ const Info = styled.div`
 const Name = styled.p`
   margin: 0 15px;
   font-weight: 600;
-  /** The title will on show 2 lines */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -104,12 +103,12 @@ const Description = styled.p`
 const Shopping = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 0 1rem;
   width: 100%;
   height: 2rem;
   margin-top: 1rem;
 `;
+
 const Cart = styled.div``;
 const Price = styled.div``;
 

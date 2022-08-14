@@ -62,7 +62,6 @@ const Products = () => {
                         <input
                           onChange={(e) => {
                             handleCategory(e);
-                            // handleCheckbox(e);
                           }}
                           type="checkbox"
                           name="category"

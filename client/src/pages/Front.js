@@ -73,10 +73,7 @@ const Featured = styled.div`
   margin: 2rem 0;
 `;
 
-const Link = styled(NavLink)`
-  color: inherit; //blue colors for links too
-  text-decoration: inherit; /* no underline */
-`;
+const Link = styled(NavLink)``;
 
 const Button = styled.button`
   all: unset;

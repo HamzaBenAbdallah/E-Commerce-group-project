@@ -38,7 +38,6 @@ const Checkout = () => {
     });
   };
 
-  // Get items from localStorage and extract the ids of the items
   const items = JSON.parse(localStorage.getItem("cart"));
   let itemIds = [];
   items?.map((item) => {
@@ -91,8 +90,6 @@ const Checkout = () => {
       navigate("/confirmation");
     }, 2000);
   };
-
-  // console.log(`items:`, items);
 
   return (
     <Container>
@@ -186,7 +183,6 @@ const Checkout = () => {
             required
           />
         </InfoContainer>
-        {/* <Button type="submit">CONTINUE TO PAYMENT</Button> */}
         <Button type="submit">
           {loadingPurchase ? (
             <Loading>
@@ -230,8 +226,6 @@ const Checkout = () => {
     </Container>
   );
 };
-
-/** Styling */
 
 const Container = styled.div`
   display: flex;

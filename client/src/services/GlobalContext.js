@@ -47,7 +47,6 @@ export const GlobalProvider = ({ children }) => {
     console.log("decreased");
   };
 
-  //This function runs every time the cart changes to find if we wanted to remove an item from our cart
   const chekCartForEmptyItems = () => {
     let idsOfItemsInCart = cart.map((object) => Object.keys(object));
     for (let i = 0; i < cart.length; i++) {
@@ -59,7 +58,7 @@ export const GlobalProvider = ({ children }) => {
       }
     }
   };
-  //check cart to find items in local storage
+
   const checkCart = async () => {
     let cartFromLocalStorage = await localStorage.getItem("cart");
     if (cartFromLocalStorage) {
@@ -76,7 +75,7 @@ export const GlobalProvider = ({ children }) => {
       });
     setIsLoading(false);
   }, []);
-  //Sets the cart on the first mount to see if the item contains something in local storage
+
   useEffect(() => {
     setIsLoading(true);
     fetch("/get-companies")
@@ -122,7 +121,6 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  //This function runs every time the cart changes to find if we wanted to remove an item from our cart
   useEffect(() => {
     chekCartForEmptyItems();
   }, [cart]);

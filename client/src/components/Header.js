@@ -8,7 +8,6 @@ import styled from "styled-components";
 const Header = () => {
   const { cart } = useContext(GlobalContext);
 
-  // this is to count how many items are in the cart
   const initialValue = 0;
   let itemsInCart;
   if (cart.length >= 0) {
@@ -61,8 +60,8 @@ const Wrapper = styled.div`
 `;
 
 const Link = styled(NavLink)`
-  color: inherit; //blue colors for links too
-  text-decoration: inherit; /* no underline */
+  color: inherit;
+  text-decoration: inherit;
 `;
 
 const Title = styled.h1`
