@@ -63,6 +63,7 @@ const NavLink = styled(Link)`
   transition: transform 0.25s ease-in-out;
   opacity: ${(props) => (props.opacity ? 0.2 : 1)};
   pointer-events: ${(props) => (props.quantity ? "none" : "")};
+  height: 500px;
 
   &:hover {
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.8);

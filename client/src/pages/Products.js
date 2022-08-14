@@ -4,6 +4,8 @@ import { LandingPageContext } from "../services/LandingPageContext";
 import { PaginationContext } from "../services/PaginateContext";
 import { GlobalContext } from "../services/GlobalContext";
 import { FilterContext } from "../services/FilterContext";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import Card from "../components/Card";
 
 import Pagination from "./Pagination";
@@ -44,6 +46,7 @@ const Products = () => {
               <Btn
                 onClick={() => {
                   refreshPage();
+                  setPageNum(0);
                 }}
               >
                 Reset ↻
@@ -57,10 +60,14 @@ const Products = () => {
                     return (
                       <label key={idx}>
                         <input
-                          onChange={(e) => handleCategory(e)}
+                          onChange={(e) => {
+                            handleCategory(e);
+                            // handleCheckbox(e);
+                          }}
                           type="checkbox"
                           name="category"
                           value={itemCategories}
+                          onClick={() => setPageNum(0)}
                         />
                         <span>{itemCategories}</span>
                       </label>
@@ -83,6 +90,7 @@ const Products = () => {
                           type="checkbox"
                           name="bodLocation"
                           value={bodLoca}
+                          onClick={() => setPageNum(0)}
                         />
                         <span>{bodLoca}</span>
                       </label>
@@ -114,7 +122,9 @@ const Products = () => {
           <Pagination />
         </>
       ) : (
-        <p>Loading...</p>
+        <Loading>
+          <CircularProgress />
+        </Loading>
       )}
     </Wrapper>
   );
@@ -155,8 +165,6 @@ const Categories = styled.ul`
     color: white;
     background-color: #001d6e;
     border-bottom: 2px solid white;
-
-    /* border: 2px solid red; */
     font-size: 1.3rem;
 
     :last-child {
@@ -215,6 +223,11 @@ const Btn = styled.button`
   cursor: pointer;
   font-weight: bold;
   color: white;
+`;
+
+const Loading = styled.div`
+  margin: auto;
+  padding-top: 150px;
 `;
 
 export default Products;

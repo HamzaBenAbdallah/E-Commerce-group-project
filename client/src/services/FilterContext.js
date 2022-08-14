@@ -14,7 +14,12 @@ export const FilterProviders = ({ children }) => {
 
   const handleCategory = (data) => {
     const newVal = [...getCategory];
-    console.log(data.target);
+    console.log(
+      `is checked:`,
+      data.target.checked,
+      `value:`,
+      data.target.value
+    );
     if (data.target.checked === true) {
       newVal.push(data.target.value);
     } else if (data.target.checked === false) {
