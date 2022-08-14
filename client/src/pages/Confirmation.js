@@ -7,8 +7,10 @@ const Confirmation = () => {
   const [customerData, setCustomerData] = useState([]);
   const [boughtItem, setBoughtItem] = useState([]);
   const [subCost, setSubCost] = useState();
-  // const { customerData, boughtItem } = useContext(GlobalContext);
 
+  const items = JSON.parse(localStorage.getItem("cart"));
+
+  // console.log(`items:`, items.length);
   useEffect(() => {
     fetch("/confirmed-purchased")
       .then((res) => res.json())
@@ -25,83 +27,75 @@ const Confirmation = () => {
       });
   }, []);
 
-  console.log(`subCost:`, typeof subCost);
+  console.log(`boughtItem:`, boughtItem.length);
 
-  // let subCost = 0;
-
-  // boughtItem.forEach((allPurchases) => {
-  //   const numberCost = Number(allPurchases.price.substring(1));
-  //   return (subCost += numberCost);
-  // });
-
-  // boughtItem.forEach((allPurchases) => {
-  //   setSubCost(Number(allPurchases.price));
-  // });
-
-  // const shipAndHand = 15;
   const totalBeforeTax = Number((subCost - 15).toFixed(2));
   const gstHst = Number((subCost * 0.05).toFixed(2));
   const pstRstQst = Number((subCost * 0.09975).toFixed(2));
   const grandTotal = (subCost + gstHst + pstRstQst).toFixed(2);
+
   return (
     <Container>
-      <h1>Your order is on it's way!</h1>
-      <span>
-        Once we ship your order you will receive an email with the shipping
-        details.
-      </span>
+      {boughtItem.length > 0 ? (
+        <>
+          <h1>Your order is on it's way!</h1>
+          <span>
+            Once we ship your order you will receive an email with the shipping
+            details.
+          </span>
 
-      <h2>Order summary</h2>
-      <div>
-        <p>Order on:</p>
-        <p>Order #:</p>
-      </div>
-      <div>
-        <p>Name: {customerData.firstName}</p>
-        {customerData?.apt ? (
-          <p>
-            Shipping Address: {customerData.apt}-{customerData.address}
-          </p>
-        ) : (
-          <p>Shipping Address: {customerData.address}</p>
-        )}
-      </div>
-      <ol>
-        {boughtItem.map((purchase) => {
-          return (
-            <summary>
-              <li>
-                <img src={`${purchase?.imageSrc}`} alt="product" />
-              </li>
-              <List>
-                <p>
-                  <span>Product: </span>
-                  {purchase?.name}
-                </p>
-                <br></br>
-                <p>
-                  <span>Quantity:</span> {purchase?.quantity}
-                </p>
-                <br></br>
-                <p>
-                  <span>Cost:</span> {purchase.price}
-                </p>
-              </List>
-            </summary>
-          );
-        })}
-      </ol>
-      <Cost>
-        <p>Item(s) subtotal: ${totalBeforeTax}</p>
-        <p>Shipping and Handling: $15</p>
-        <p>Total before tax: ${subCost}</p>
-        <p>Estimated GST/HST: ${gstHst}</p>
-        <p>Estimated PST/RST/QST: ${pstRstQst}</p>
-        <p>Grand Total: ${grandTotal}</p>
-      </Cost>
-      <Link to="/products">
-        <button>Continue Shopping</button>
-      </Link>
+          <h2>Order summary</h2>
+
+          <div>
+            <p>Name: {customerData.firstName}</p>
+            {customerData?.apt ? (
+              <p>
+                Shipping Address: {customerData.apt}-{customerData.address}
+              </p>
+            ) : (
+              <p>Shipping Address: {customerData.address}</p>
+            )}
+          </div>
+          <ol>
+            {boughtItem.map((purchase) => {
+              return (
+                <summary>
+                  <li>
+                    <img src={`${purchase?.imageSrc}`} alt="product" />
+                  </li>
+                  <List>
+                    <p>
+                      <span>Product: </span>
+                      {purchase?.name}
+                    </p>
+                    <br></br>
+                    <p>
+                      <span>Quantity:</span> {purchase?.quantity}
+                    </p>
+                    <br></br>
+                    <p>
+                      <span>Cost:</span> {purchase.price}
+                    </p>
+                  </List>
+                </summary>
+              );
+            })}
+          </ol>
+          <Cost>
+            <p>Item(s) subtotal: ${totalBeforeTax}</p>
+            <p>Shipping and Handling: $15</p>
+            <p>Total before tax: ${subCost}</p>
+            <p>Estimated GST/HST: ${gstHst}</p>
+            <p>Estimated PST/RST/QST: ${pstRstQst}</p>
+            <p>Grand Total: ${grandTotal}</p>
+          </Cost>
+          <Link to="/products">
+            <button>Continue Shopping</button>
+          </Link>
+        </>
+      ) : (
+        <Empty>No Purchases Made</Empty>
+      )}
     </Container>
   );
 };
@@ -184,4 +178,8 @@ const Cost = styled.section`
     text-align: left;
     width: 50vw;
   }
+`;
+
+const Empty = styled.h1`
+  padding-top: 25vh;
 `;

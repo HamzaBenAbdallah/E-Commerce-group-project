@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 import styled from "styled-components";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const initialState = {
   firstName: "",
@@ -90,6 +91,8 @@ const Checkout = () => {
       navigate("/confirmation");
     }, 2000);
   };
+
+  // console.log(`items:`, items);
 
   return (
     <Container>
@@ -184,11 +187,15 @@ const Checkout = () => {
           />
         </InfoContainer>
         {/* <Button type="submit">CONTINUE TO PAYMENT</Button> */}
-        {loadingPurchase ? (
-          <Button type="submit">Loading</Button>
-        ) : (
-          <Button type="submit">CONTINUE TO PAYMENT</Button>
-        )}
+        <Button type="submit">
+          {loadingPurchase ? (
+            <Loading>
+              <CircularProgress style={{ color: "white" }} />
+            </Loading>
+          ) : (
+            "CONTINUE TO PAYMENT"
+          )}
+        </Button>
       </Buyer>
       <Cart>
         <Items>
@@ -342,4 +349,8 @@ const Separator = styled.div`
   align-self: center;
 `;
 
+const Loading = styled.div`
+  margin: auto;
+  padding: 5px 0;
+`;
 export default Checkout;
