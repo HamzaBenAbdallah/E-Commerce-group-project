@@ -29,7 +29,7 @@ const Front = () => {
             );
           })}
         </Featured>
-        <Link to="/products">
+        <Link reloadDocument to="/products">
           <Button>Browse all products</Button>
         </Link>
       </Info>
