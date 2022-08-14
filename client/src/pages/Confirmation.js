@@ -1,83 +1,125 @@
-import styled from "styled-components";
-import React, { useContext } from "react";
-import { GlobalContext } from "../services/GlobalContext";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Confirmation = () => {
-  const { customerData, boughtItem } = useContext(GlobalContext);
+  const [customerData, setCustomerData] = useState([]);
+  const [boughtItem, setBoughtItem] = useState([]);
+  const [subCost, setSubCost] = useState();
+  const [loadingItems, setLoadingItems] = useState(false);
 
-  let subCost = 0;
+  useEffect(() => {
+    fetch("/confirmed-purchased")
+      .then((res) => res.json())
+      .then((customer) => {
+        setCustomerData(
+          customer.customerData[customer.customerData.length - 1]?.formData
+        );
+        setBoughtItem(
+          customer.customerData[customer.customerData.length - 1]?.itemsData
+        );
+        setSubCost(
+          Number(customer.customerData[customer.customerData.length - 1]?.total)
+        );
+        setLoadingItems(true);
+      });
+  }, []);
 
-  boughtItem.forEach((allPurchases) => {
-    const numberCost = Number(allPurchases.price.substring(1));
-    return (subCost += numberCost);
-  });
+  console.log(`boughtItem:`, boughtItem.length);
 
-  const shipAndHand = 10;
-  const totalBeforeTax = subCost + shipAndHand;
-  const gstHst = Number(((subCost + shipAndHand) * 0.05).toFixed(2));
-  const pstRstQst = Number(((subCost + shipAndHand) * 0.09975).toFixed(2));
-  const grandTotal = (totalBeforeTax + gstHst + pstRstQst).toFixed(2);
+  const totalBeforeTax = Number((subCost - 15).toFixed(2));
+  const gstHst = Number((subCost * 0.05).toFixed(2));
+  const pstRstQst = Number((subCost * 0.09975).toFixed(2));
+  const grandTotal = (subCost + gstHst + pstRstQst).toFixed(2);
+
   return (
     <Container>
-      <h1>Your order is on it's way!</h1>
-      <span>
-        Once we ship your order you will receive an email with the shipping
-        details.
-      </span>
+      {loadingItems ? (
+        <>
+          {boughtItem.length >= 1 ? (
+            <>
+              <h1>Your order is on it's way!</h1>
+              <span>
+                Once we ship your order you will receive an email with the
+                shipping details.
+              </span>
 
-      <h2>Order summary</h2>
-      <div>
-        <p>Order on:</p>
-        <p>Order #:</p>
-      </div>
-      <div>
-        <p>Name: {customerData.firstName}</p>
-        {customerData?.apt ? (
-          <p>
-            Shipping Address:{customerData.apt}-{customerData.address}
-          </p>
-        ) : (
-          <p>Shipping Address: {customerData.address}</p>
-        )}
-      </div>
-      <ol>
-        {boughtItem.map((purchase) => {
-          console.log(`purchase:`, purchase.name);
-          return (
-            <summary>
-              <li>
-                <img src={`${purchase?.imageSrc}`} alt="product" />
-              </li>
-              <List>
+              <h2>Order summary:</h2>
+
+              <div>
                 <p>
-                  <span>Product: </span>
-                  {purchase?.name}
+                  <span>Name:</span> {customerData.firstName}
                 </p>
-                <br></br>
+                {customerData?.apt ? (
+                  <p>
+                    <span>Shipping Address:</span> {customerData.apt}-
+                    {customerData.address}
+                  </p>
+                ) : (
+                  <p>
+                    <span>Shipping Address:</span> {customerData.address}
+                  </p>
+                )}
+              </div>
+              <ol>
+                {boughtItem.map((purchase) => {
+                  return (
+                    <summary>
+                      <li>
+                        <img src={`${purchase?.imageSrc}`} alt="product" />
+                      </li>
+                      <List>
+                        <p>
+                          <span>Product: </span>
+                          {purchase?.name}
+                        </p>
+                        <br></br>
+                        <p>
+                          <span>Quantity:</span> {purchase?.quantity}
+                        </p>
+                        <br></br>
+                        <p>
+                          <span>Cost:</span> {purchase.price}
+                        </p>
+                      </List>
+                    </summary>
+                  );
+                })}
+              </ol>
+              <Cost>
                 <p>
-                  <span>Quantity:</span> {purchase?.quantity}
+                  <span>Item(s) subtotal:</span> ${totalBeforeTax}
                 </p>
-                <br></br>
                 <p>
-                  <span>Cost:</span> {purchase.price}
+                  <span>Shipping and Handling:</span> $15
                 </p>
-              </List>
-            </summary>
-          );
-        })}
-      </ol>
-      <Cost>
-        <p>Item(s) subtotal: ${subCost}</p>
-        <p>Shipping and Handling: ${shipAndHand}</p>
-        <p>Total before tax: ${totalBeforeTax}</p>
-        <p>Estimated GST/HST: ${gstHst}</p>
-        <p>Estimated PST/RST/QST: ${pstRstQst}</p>
-        <p>Grand Total: ${grandTotal}</p>
-      </Cost>
-      <Link to="/products">
-        <button>Continue Shopping</button>
-      </Link>
+                <p>
+                  <span>Total before tax:</span> ${subCost}
+                </p>
+                <p>
+                  <span>Estimated GST/HST:</span> ${gstHst}
+                </p>
+                <p>
+                  <span>Estimated PST/RST/QST:</span> ${pstRstQst}
+                </p>
+                <p>
+                  <span>Grand Total:</span> ${grandTotal}
+                </p>
+              </Cost>
+              <Link to="/products">
+                <button>Continue Shopping</button>
+              </Link>
+            </>
+          ) : (
+            <Empty>No Purchases Made</Empty>
+          )}
+        </>
+      ) : (
+        <Loading>
+          <CircularProgress size={100} />
+        </Loading>
+      )}
     </Container>
   );
 };
@@ -103,7 +145,9 @@ const Container = styled.div`
   }
 
   h2 {
-    padding: 10px 0;
+    padding: 40px 0 10px 0;
+    font-size: 1.2rem;
+    text-decoration-line: underline;
   }
 
   div {
@@ -115,10 +159,10 @@ const Container = styled.div`
 
   summary {
     border: 2px solid #ccc;
+    border-radius: 10px;
     display: flex;
     text-align: center;
     --summary-width: 50vw;
-    padding: 0;
   }
   li:first-child {
     margin: auto;
@@ -135,13 +179,21 @@ const Container = styled.div`
   }
 
   ol {
+    padding: 15px;
     img {
       height: 150px;
     }
   }
 
   button {
-    margin: 15px 0 20px 0;
+    margin: 15px 0 30px 0;
+    background-color: #2a4991;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 15px 20px;
+    border: none;
   }
 `;
 
@@ -150,14 +202,22 @@ const Cost = styled.section`
   flex-direction: row;
   justify-content: center;
   align-self: center;
-  gap: 10px;
+  gap: 20px;
   width: 43%;
   padding-top: 30px;
   line-height: 25px;
+  padding-bottom: 20px;
 
   p {
-    /* padding-left: 43%; */
     text-align: left;
     width: 50vw;
   }
+`;
+
+const Loading = styled.div`
+  margin-top: 150px;
+`;
+
+const Empty = styled.h1`
+  padding-top: 25vh;
 `;

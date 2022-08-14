@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 
 const ProductDescription = () => {

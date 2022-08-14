@@ -29,7 +29,7 @@ const Front = () => {
             );
           })}
         </Featured>
-        <Link to="/products">
+        <Link reloadDocument to="/products">
           <Button>Browse all products</Button>
         </Link>
       </Info>
@@ -41,7 +41,6 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin: 2rem 0;
   font-family: sans-serif;
   gap: 2rem;
   height: 100vh;
@@ -75,8 +74,7 @@ const Featured = styled.div`
 `;
 
 const Link = styled(NavLink)`
-  color: inherit; //blue colors for links too
-  text-decoration: inherit; /* no underline */
+  text-decoration: none;
 `;
 
 const Button = styled.button`

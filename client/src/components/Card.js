@@ -1,7 +1,11 @@
 import styled from "styled-components";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { GlobalContext } from "../services/GlobalContext";
 
 const Card = ({ item }) => {
+  const { addProductToCart } = useContext(GlobalContext);
+
   return (
     <NavLink
       key={item._id}
@@ -29,7 +33,15 @@ const Card = ({ item }) => {
       <Separator />
       <Shopping>
         <Price>{item.price}</Price>
-        <Purchase>+ Add to cart</Purchase>
+        <Cart>
+          <Purchase onClick={(event) => addProductToCart(item._id, event, -1)}>
+            -
+          </Purchase>
+          <>🛒</>
+          <Purchase onClick={(event) => addProductToCart(item._id, event, 1)}>
+            +
+          </Purchase>
+        </Cart>
       </Shopping>
     </NavLink>
   );
@@ -42,13 +54,16 @@ const NavLink = styled(Link)`
   justify-content: center;
   align-items: center;
   text-decoration: none;
+  text-align: center;
+  color: black;
+  border-radius: 5px;
   min-width: 250px;
   box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.3);
-  line-height: 1.25rem;
-  font-family: sans-serif;
+  line-height: 1.5rem;
   transition: transform 0.25s ease-in-out;
   opacity: ${(props) => (props.opacity ? 0.2 : 1)};
   pointer-events: ${(props) => (props.quantity ? "none" : "")};
+  height: 500px;
 
   &:hover {
     box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.8);
@@ -73,10 +88,8 @@ const Info = styled.div`
 `;
 
 const Name = styled.p`
-  width: 28ch;
-  text-align: center;
+  margin: 0 15px;
   font-weight: 600;
-  /** The title will on show 2 lines */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -96,9 +109,12 @@ const Shopping = styled.div`
   margin-top: 1rem;
 `;
 
+const Cart = styled.div``;
 const Price = styled.div``;
 
-const Purchase = styled.div``;
+const Purchase = styled.button`
+  margin: 0;
+`;
 
 const Separator = styled.div`
   width: 100%;

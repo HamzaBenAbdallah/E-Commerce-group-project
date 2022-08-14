@@ -9,7 +9,8 @@ const Pagination = () => {
   const { handlePageClick, productsPerPage, pageNum } =
     useContext(PaginationContext);
 
-  const { filterAllSeletions } = useContext(FilterContext);
+  const { filterAllSeletions, getBodyLocation, getCategory } =
+    useContext(FilterContext);
 
   const itemData = useContext(GlobalContext);
 
@@ -20,8 +21,12 @@ const Pagination = () => {
 
   let pageNumbers = [];
 
+  console.log(`filterAllSeletions length:`, filterAllSeletions.length);
+
+  console.log(`getBodyLocation:`, getBodyLocation, `getCategory:`, getCategory);
+
   const numberOfPages = () => {
-    if (filterAllSeletions.length < 1) {
+    if (getCategory < 1 && getBodyLocation < 1) {
       return (getAllItems.length - 1) / productsPerPage;
     } else if (filterAllSeletions.length > 0) {
       return (filterAllSeletions.length - 1) / productsPerPage;
@@ -62,32 +67,41 @@ const Paginate = styled.div`
   list-style-type: none;
   display: flex;
   justify-content: center;
-  gap: 10px;
+  padding: 0 50px;
+
   padding-bottom: 20px;
 
   .paginateStyle {
     font-weight: bold;
-    border: 2px solid red;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    width: 500px;
+    font-size: 1rem;
+    width: 800px;
+    border-radius: 15px;
+    cursor: pointer;
 
-    .selected {
+    .selected a {
+      color: ${(props) => (props.sameNum ? "white" : "black")};
+      background: ${(props) => (props.sameNum ? "#001d6e" : "white")};
+    }
+  }
+
+  .paginateStyle a {
+    padding: 10px;
+    margin: 8px;
+    border-radius: 5px;
+    border: 1px solid #001d6e;
+    color: #001d6e;
+
+    :hover {
+      color: black;
+      background-color: #ccc;
+    }
+
+    a.selected {
       color: ${(props) => (props.sameNum ? "white" : "black")};
       background: ${(props) => (props.sameNum ? "#0000a3" : "white")};
-    }
-
-    li {
-      display: inline;
-      justify-content: center;
-      text-align: center;
-      cursor: pointer;
-      padding: 5px 5px;
-      border-radius: 5px;
-    }
-    li:hover {
-      background-color: #ccc;
     }
   }
 `;

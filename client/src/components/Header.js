@@ -8,7 +8,6 @@ import styled from "styled-components";
 const Header = () => {
   const { cart } = useContext(GlobalContext);
 
-  // this is to count how many items are in the cart
   const initialValue = 0;
   let itemsInCart;
   if (cart.length >= 0) {
@@ -17,6 +16,7 @@ const Header = () => {
       .reduce((a, b) => a + b, initialValue);
   }
 
+  console.log(window.location.pathname);
   return (
     <Wrapper>
       <Container>
@@ -24,7 +24,7 @@ const Header = () => {
           <Title>Our Super cool Store Name</Title>
         </Link>
         <Menu>
-          <Link to="/products">
+          <Link reloadDocument to="/products">
             <Item>Products</Item>
           </Link>
         </Menu>
@@ -54,11 +54,15 @@ const Wrapper = styled.div`
   font-family: sans-serif;
   border-bottom: 2px solid #ccc;
   --height: 80px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
 `;
 
 const Link = styled(NavLink)`
-  color: inherit; //blue colors for links too
-  text-decoration: inherit; /* no underline */
+  color: inherit;
+  text-decoration: inherit;
 `;
 
 const Title = styled.h1`

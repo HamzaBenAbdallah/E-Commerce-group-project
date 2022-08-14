@@ -15,10 +15,8 @@ export const GlobalProvider = ({ children }) => {
 
   const [getItems, setGetItems] = useState([]);
   const [getCompany, setGetCompany] = useState();
-  const [customerData, setCustomerData] = useState([]);
-  const [boughtItem, setBoughtItem] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingItems, setLoadingItems] = useState(false);
 
   const addProductToCart = async (id, event, quantityToAdd) => {
     event.preventDefault();
@@ -49,7 +47,6 @@ export const GlobalProvider = ({ children }) => {
     console.log("decreased");
   };
 
-  //This function runs every time the cart changes to find if we wanted to remove an item from our cart
   const chekCartForEmptyItems = () => {
     let idsOfItemsInCart = cart.map((object) => Object.keys(object));
     for (let i = 0; i < cart.length; i++) {
@@ -61,7 +58,7 @@ export const GlobalProvider = ({ children }) => {
       }
     }
   };
-  //check cart to find items in local storage
+
   const checkCart = async () => {
     let cartFromLocalStorage = await localStorage.getItem("cart");
     if (cartFromLocalStorage) {
@@ -73,28 +70,18 @@ export const GlobalProvider = ({ children }) => {
     fetch("/get-items")
       .then((res) => res.json())
       .then((itemData) => {
-        return setGetItems(itemData.items);
-      });
-    setIsLoading(false);
-  }, []);
-  //Sets the cart on the first mount to see if the item contains something in local storage
-  useEffect(() => {
-    setIsLoading(true);
-    fetch("/get-companies")
-      .then((res) => res.json())
-      .then((companies) => {
-        return setGetCompany(companies.data);
+        setGetItems(itemData.items);
+        setLoadingItems(true);
       });
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
     setIsLoading(true);
-    fetch("/confirmed-purchased")
+    fetch("/get-companies")
       .then((res) => res.json())
-      .then((customer) => {
-        setCustomerData(customer?.customerData[0]?.formData);
-        setBoughtItem(customer?.customerData[0]?.itemsData);
+      .then((companies) => {
+        return setGetCompany(companies.data);
       });
     setIsLoading(false);
   }, []);
@@ -134,7 +121,6 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  //This function runs every time the cart changes to find if we wanted to remove an item from our cart
   useEffect(() => {
     chekCartForEmptyItems();
   }, [cart]);
@@ -152,9 +138,8 @@ export const GlobalProvider = ({ children }) => {
         increaseQuantityInCart,
         decreaseQuantityInCart,
         cartTotal,
+        loadingItems,
         setCartTotal,
-        customerData,
-        boughtItem,
       }}
     >
       {children}

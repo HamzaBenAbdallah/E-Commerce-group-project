@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 import styled from "styled-components";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const initialState = {
   firstName: "",
@@ -21,6 +22,7 @@ const Checkout = () => {
   const [formData, setFormData] = useState(initialState);
   const [itemsData, setItemsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingPurchase, setLoadingPurchase] = useState(false);
   const { getItems, cartTotal, setCart } = useContext(GlobalContext);
   const itemsList = Object.values(getItems);
 
@@ -36,7 +38,6 @@ const Checkout = () => {
     });
   };
 
-  // Get items from localStorage and extract the ids of the items
   const items = JSON.parse(localStorage.getItem("cart"));
   let itemIds = [];
   items?.map((item) => {
@@ -66,6 +67,7 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoadingPurchase(true);
     const order = {
       formData,
       itemsData,
@@ -80,11 +82,13 @@ const Checkout = () => {
       body: JSON.stringify({ order }),
     });
 
-    setFormData(initialState);
-    setItemsData([]);
-    localStorage.clear();
-    setCart([]);
-    navigate("/confirmation");
+    setTimeout(() => {
+      setFormData(initialState);
+      localStorage.clear();
+      setItemsData([]);
+      setCart([]);
+      navigate("/confirmation");
+    }, 2000);
   };
 
   return (
@@ -179,7 +183,15 @@ const Checkout = () => {
             required
           />
         </InfoContainer>
-        <Button type="submit">CONTINUE TO PAYMENT</Button>
+        <Button type="submit">
+          {loadingPurchase ? (
+            <Loading>
+              <CircularProgress style={{ color: "white" }} />
+            </Loading>
+          ) : (
+            "CONTINUE TO PAYMENT"
+          )}
+        </Button>
       </Buyer>
       <Cart>
         <Items>
@@ -214,8 +226,6 @@ const Checkout = () => {
     </Container>
   );
 };
-
-/** Styling */
 
 const Container = styled.div`
   display: flex;
@@ -333,4 +343,8 @@ const Separator = styled.div`
   align-self: center;
 `;
 
+const Loading = styled.div`
+  margin: auto;
+  padding: 5px 0;
+`;
 export default Checkout;
