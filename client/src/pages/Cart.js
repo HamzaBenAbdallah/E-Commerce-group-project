@@ -69,7 +69,10 @@ const CartWrapper = styled.div`
   align-items: center;
   text-align: center;
   box-shadow: 0px 0px 3px 1px rgba(151, 151, 151, 0.53);
-
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
   * {
     margin: 2.5px;
   }
