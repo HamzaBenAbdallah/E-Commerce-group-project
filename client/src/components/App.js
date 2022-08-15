@@ -33,12 +33,7 @@ function App() {
               element={<ProductDescription />}
             />
             <Route path="/cart" element={<Cart />} />
-            <Route
-              path="/checkout"
-              element={
-                cart.length > 0 ? <Checkout /> : <Navigate replace to="/" />
-              }
-            />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />
           </Routes>
         </Main>
