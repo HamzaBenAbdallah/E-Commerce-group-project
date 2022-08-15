@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyles from "../GlobalStyles";
 import Header from "./Header";
@@ -8,8 +13,12 @@ import ProductDescription from "../pages/ProductDescription";
 import Cart from "../pages/Cart";
 import Confirmation from "../pages/Confirmation";
 import Checkout from "../pages/Checkout";
+import React, { useContext } from "react";
+import { GlobalContext } from "../services/GlobalContext";
 
 function App() {
+  const { cart } = useContext(GlobalContext);
+
   return (
     <>
       <GlobalStyles />
@@ -24,7 +33,12 @@ function App() {
               element={<ProductDescription />}
             />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route
+              path="/checkout"
+              element={
+                cart.length > 0 ? <Checkout /> : <Navigate replace to="/" />
+              }
+            />
             <Route path="/confirmation" element={<Confirmation />} />
           </Routes>
         </Main>

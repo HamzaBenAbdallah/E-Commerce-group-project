@@ -20,7 +20,6 @@ export const GlobalProvider = ({ children }) => {
 
   const addProductToCart = async (id, event, quantityToAdd) => {
     event.preventDefault();
-    // window.location.reload();
     let itemsObject = { [id]: quantityToAdd };
     if (cart?.filter((item) => item[id]).length > 0) {
       let indexOfItem = cart.findIndex((item) => item[id]);
