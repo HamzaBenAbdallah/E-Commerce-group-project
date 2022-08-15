@@ -21,7 +21,7 @@ const Header = () => {
     <Wrapper>
       <Container>
         <Link to="/">
-          <Title>Our Super cool Store Name</Title>
+          <Title>No strings attached</Title>
         </Link>
         <Menu>
           <Link reloadDocument to="/products">

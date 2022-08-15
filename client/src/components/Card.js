@@ -1,10 +1,19 @@
 import styled from "styled-components";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 
 const Card = ({ item }) => {
-  const { addProductToCart } = useContext(GlobalContext);
+  const { addProductToCart, cart } = useContext(GlobalContext);
+  const [matchedItemInCart, setMatchedItemInCart] = useState(0);
+
+  useEffect(() => {
+    cart.map((cartItem) => {
+      if (Object.keys(cartItem)[0] == item._id) {
+        setMatchedItemInCart(Object.values(cartItem)[0]);
+      }
+    });
+  }, [cart]);
 
   return (
     <NavLink
@@ -38,7 +47,10 @@ const Card = ({ item }) => {
             -
           </Purchase>
           <>🛒</>
-          <Purchase onClick={(event) => addProductToCart(item._id, event, 1)}>
+          <Purchase
+            onClick={(event) => addProductToCart(item._id, event, 1)}
+            disabled={matchedItemInCart >= item.numInStock ? true : false}
+          >
             +
           </Purchase>
         </Cart>
