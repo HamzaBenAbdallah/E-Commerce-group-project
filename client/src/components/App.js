@@ -1,15 +1,57 @@
-import { useState, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import styled from "styled-components";
+import GlobalStyles from "../GlobalStyles";
+import Header from "./Header";
+import Front from "../pages/Front";
+import Products from "../pages/Products";
+import ProductDescription from "../pages/ProductDescription";
+import Cart from "../pages/Cart";
+import Confirmation from "../pages/Confirmation";
+import Checkout from "../pages/Checkout";
+import React, { useContext } from "react";
+import { GlobalContext } from "../services/GlobalContext";
 
 function App() {
-  const [bacon, setBacon] = useState(null);
+  const { cart } = useContext(GlobalContext);
 
-  useEffect(() => {
-    fetch('/bacon')
-      .then(res => res.json())
-      .then(data => setBacon(data));
-  }, []);
-
-  return <div>{bacon ? bacon : `...where's my stuff?...`}</div>;
+  return (
+    <>
+      <GlobalStyles />
+      <Router>
+        <Header />
+        <Main>
+          <Routes>
+            <Route exact path="/" element={<Front />} />
+            <Route exact path="/products" element={<Products />} />
+            <Route
+              path="/products/:product_id"
+              element={<ProductDescription />}
+            />
+            <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/checkout"
+              element={
+                cart.length > 0 ? <Checkout /> : <Navigate replace to="/" />
+              }
+            />
+            <Route path="/confirmation" element={<Confirmation />} />
+          </Routes>
+        </Main>
+      </Router>
+    </>
+  );
 }
+
+const Main = styled.main`
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
 
 export default App;
