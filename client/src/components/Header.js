@@ -16,7 +16,6 @@ const Header = () => {
       .reduce((a, b) => a + b, initialValue);
   }
 
-  console.log(window.location.pathname);
   return (
     <Wrapper>
       <Container>

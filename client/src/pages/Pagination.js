@@ -21,10 +21,6 @@ const Pagination = () => {
 
   let pageNumbers = [];
 
-  console.log(`filterAllSeletions length:`, filterAllSeletions.length);
-
-  console.log(`getBodyLocation:`, getBodyLocation, `getCategory:`, getCategory);
-
   const numberOfPages = () => {
     if (getCategory < 1 && getBodyLocation < 1) {
       return (getAllItems.length - 1) / productsPerPage;

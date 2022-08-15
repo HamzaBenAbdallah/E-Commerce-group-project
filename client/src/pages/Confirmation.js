@@ -26,8 +26,6 @@ const Confirmation = () => {
       });
   }, []);
 
-  console.log(`boughtItem:`, boughtItem.length);
-
   const totalBeforeTax = Number((subCost - 15).toFixed(2));
   const gstHst = Number((subCost * 0.05).toFixed(2));
   const pstRstQst = Number((subCost * 0.09975).toFixed(2));

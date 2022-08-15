@@ -38,13 +38,11 @@ export const GlobalProvider = ({ children }) => {
   const increaseQuantityInCart = async (event, id) => {
     let indexOfItemToIncrease = await cart.findIndex((item) => item[id]);
     setCart([...cart], (cart[indexOfItemToIncrease][id] += 1));
-    console.log("increased");
   };
 
   const decreaseQuantityInCart = async (event, id) => {
     let indexOfItemToDecrease = await cart.findIndex((item) => item[id]);
     setCart([...cart], (cart[indexOfItemToDecrease][id] -= 1));
-    console.log("decreased");
   };
 
   const chekCartForEmptyItems = () => {
@@ -54,7 +52,7 @@ export const GlobalProvider = ({ children }) => {
         let copyOfCart = [...cart];
         copyOfCart.splice(i, 1);
         setCart([...copyOfCart]);
-        return console.log("deleted", cart[i]);
+        return;
       }
     }
   };
