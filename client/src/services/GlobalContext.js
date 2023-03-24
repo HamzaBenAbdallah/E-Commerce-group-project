@@ -14,7 +14,6 @@ export const GlobalProvider = ({ children }) => {
   });
 
   const [getItems, setGetItems] = useState([]);
-  const [getCompany, setGetCompany] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [loadingItems, setLoadingItems] = useState(false);
 
@@ -45,7 +44,7 @@ export const GlobalProvider = ({ children }) => {
     setCart([...cart], (cart[indexOfItemToDecrease][id] -= 1));
   };
 
-  const chekCartForEmptyItems = () => {
+  const checkCartForEmptyItems = () => {
     let idsOfItemsInCart = cart.map((object) => Object.keys(object));
     for (let i = 0; i < cart.length; i++) {
       if (cart[i][parseInt(idsOfItemsInCart[i])] < 1) {
@@ -75,16 +74,6 @@ export const GlobalProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/get-companies")
-      .then((res) => res.json())
-      .then((companies) => {
-        return setGetCompany(companies.data);
-      });
-    setIsLoading(false);
-  }, []);
-
-  useEffect(() => {
     checkCart();
   }, []);
 
@@ -105,7 +94,7 @@ export const GlobalProvider = ({ children }) => {
       if (idsOfItemsInCart.length >= 1) {
         let itemsIncart = idsOfItemsInCart?.map((id, index) => {
           return allItems?.filter((item) => {
-            return item._id == parseInt(id);
+            return item._id === parseInt(id);
           })[0];
         });
         let totals = cart?.map((object, index) => {
@@ -120,7 +109,7 @@ export const GlobalProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    chekCartForEmptyItems();
+    checkCartForEmptyItems();
   }, [cart]);
 
   return (
@@ -129,7 +118,6 @@ export const GlobalProvider = ({ children }) => {
         cart,
         setCart,
         getItems,
-        getCompany,
         addProductToCart,
         isLoading,
         removeItemFromCart,

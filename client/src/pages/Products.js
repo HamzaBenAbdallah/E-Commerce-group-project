@@ -5,7 +5,7 @@ import { LandingPageContext } from "../services/LandingPageContext";
 import { PaginationContext } from "../services/PaginateContext";
 import { GlobalContext } from "../services/GlobalContext";
 import { FilterContext } from "../services/FilterContext";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Spinner from "../components/Spinner";
 
 import Card from "../components/Card";
 
@@ -122,7 +122,7 @@ const Products = () => {
         </>
       ) : (
         <Loading>
-          <CircularProgress />
+          <Spinner />
         </Loading>
       )}
     </Wrapper>

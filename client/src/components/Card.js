@@ -10,7 +10,7 @@ const Card = ({ item }) => {
   useEffect(() => {
     cart.map((cartItem) => {
       if (Object.keys(cartItem)[0] == item._id) {
-        setMatchedItemInCart(Object.values(cartItem)[0]);
+        return setMatchedItemInCart(Object.values(cartItem)[0]);
       }
     });
   }, [cart]);

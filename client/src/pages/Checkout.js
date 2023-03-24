@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 import styled from "styled-components";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Spinner from "../components/Spinner";
 
 const initialState = {
   firstName: "",
@@ -186,7 +186,7 @@ const Checkout = () => {
         <Button type="submit">
           {loadingPurchase ? (
             <Loading>
-              <CircularProgress style={{ color: "white" }} />
+              <Spinner />
             </Loading>
           ) : (
             "CONTINUE TO PAYMENT"

@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import GlobalStyles from "../GlobalStyles";
 import Header from "./Header";
@@ -17,8 +12,6 @@ import React, { useContext } from "react";
 import { GlobalContext } from "../services/GlobalContext";
 
 function App() {
-  const { cart } = useContext(GlobalContext);
-
   return (
     <>
       <GlobalStyles />

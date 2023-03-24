@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import Spinner from "../components/Spinner";
 
 const Confirmation = () => {
   const [customerData, setCustomerData] = useState([]);
@@ -115,7 +115,7 @@ const Confirmation = () => {
         </>
       ) : (
         <Loading>
-          <CircularProgress size={100} />
+          <Spinner />
         </Loading>
       )}
     </Container>
