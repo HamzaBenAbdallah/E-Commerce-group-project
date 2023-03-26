@@ -19,10 +19,10 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Front />} />
             <Route exact path="/products" element={<Products />} />
-            <Route
+            {/* <Route
               path="/products/:product_id"
               element={<ProductDescription />}
-            />
+            /> */}
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />
