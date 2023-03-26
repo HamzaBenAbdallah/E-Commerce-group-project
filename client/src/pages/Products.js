@@ -36,76 +36,67 @@ const Products = () => {
 
   return (
     <Wrapper>
+      <Categories>
+        <Link
+          reloadDocument
+          to="/products"
+          onClick={() => {
+            setTimeout(() => {
+              setPageNum(0);
+            }, 500);
+          }}
+        >
+          Reset ↻
+        </Link>
+        <Container>
+          <h2 onClick={() => setDropCategory(!dropCategory)}>
+            {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
+          </h2>
+          <Drop picked={dropCategory}>
+            {uniqueCategories.map((itemCategories, idx) => {
+              return (
+                <label key={idx}>
+                  <input
+                    onChange={(e) => {
+                      handleCategory(e);
+                    }}
+                    type="checkbox"
+                    name="category"
+                    value={itemCategories}
+                    onClick={() => setPageNum(0)}
+                  />
+                  <span>{itemCategories}</span>
+                </label>
+              );
+            })}
+          </Drop>
+          <h2 onClick={() => setDropBodyLocation(!dropBodyLocation)}>
+            {dropBodyLocation ? <p>Body Location ⮟</p> : <p>Body Location ⮞</p>}
+          </h2>
+          <Drop picked={dropBodyLocation}>
+            {uniqueBodyLocation.map((bodLoca, idx) => {
+              return (
+                <label key={idx}>
+                  <input
+                    onChange={(e) => handleBodyLocation(e)}
+                    type="checkbox"
+                    name="bodLocation"
+                    value={bodLoca}
+                    onClick={() => setPageNum(0)}
+                  />
+                  <span>{bodLoca}</span>
+                </label>
+              );
+            })}
+          </Drop>
+          <h2 onClick={() => setIsPriceSorted(!isPriceSorted)}>
+            {isPriceSorted ? <p>Sort by Price ⮟</p> : <p>Sort by Price ⮝</p>}
+          </h2>
+        </Container>
+      </Categories>
       {loadingItems ? (
-        <>
+        <CardGridWrapper>
           <CardGrid>
-            <Categories>
-              <Link
-                reloadDocument
-                to="/products"
-                onClick={() => {
-                  setTimeout(() => {
-                    setPageNum(0);
-                  }, 500);
-                }}
-              >
-                Reset ↻
-              </Link>
-              <Container>
-                <h2 onClick={() => setDropCategory(!dropCategory)}>
-                  {dropCategory ? <p>Categories ⮟</p> : <p>Categories ⮞</p>}
-                </h2>
-                <Drop picked={dropCategory}>
-                  {uniqueCategories.map((itemCategories, idx) => {
-                    return (
-                      <label key={idx}>
-                        <input
-                          onChange={(e) => {
-                            handleCategory(e);
-                          }}
-                          type="checkbox"
-                          name="category"
-                          value={itemCategories}
-                          onClick={() => setPageNum(0)}
-                        />
-                        <span>{itemCategories}</span>
-                      </label>
-                    );
-                  })}
-                </Drop>
-                <h2 onClick={() => setDropBodyLocation(!dropBodyLocation)}>
-                  {dropBodyLocation ? (
-                    <p>Body Location ⮟</p>
-                  ) : (
-                    <p>Body Location ⮞</p>
-                  )}
-                </h2>
-                <Drop picked={dropBodyLocation}>
-                  {uniqueBodyLocation.map((bodLoca, idx) => {
-                    return (
-                      <label key={idx}>
-                        <input
-                          onChange={(e) => handleBodyLocation(e)}
-                          type="checkbox"
-                          name="bodLocation"
-                          value={bodLoca}
-                          onClick={() => setPageNum(0)}
-                        />
-                        <span>{bodLoca}</span>
-                      </label>
-                    );
-                  })}
-                </Drop>
-                <h2 onClick={() => setIsPriceSorted(!isPriceSorted)}>
-                  {isPriceSorted ? (
-                    <p>Sort by Price ⮟</p>
-                  ) : (
-                    <p>Sort by Price ⮝</p>
-                  )}
-                </h2>
-              </Container>
-            </Categories>
-
             {getCategory.length < 1 && getBodyLocation.length < 1
               ? getAllItems
                   .slice(pageVisits, pageVisits + productsPerPage)
@@ -119,7 +110,7 @@ const Products = () => {
                   })}
           </CardGrid>
           <Pagination />
-        </>
+        </CardGridWrapper>
       ) : (
         <Loading>
           <Spinner />
@@ -131,13 +122,15 @@ const Products = () => {
 
 const Wrapper = styled.div`
   display: flex;
-  width: 100%;
+  margin: 0 5rem;
+  gap: 3rem;
+`;
+
+const CardGridWrapper = styled.div`
+  display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: 2rem;
-  align-items: center;
-  padding: 0;
-  margin: 0;
+  width: 80%;
 `;
 
 const Drop = styled.div`
@@ -150,16 +143,16 @@ const Container = styled.div`
 `;
 
 const Categories = styled.ul`
-  width: 100%;
   display: flex;
   flex-direction: column;
   list-style-type: none;
   grid-area: Menu;
+  margin-top: 3rem;
 
   h2 {
     display: flex;
     flex-direction: row;
-    padding: 10px 0 10px 20px;
+    padding: 10px 10px 10px 20px;
     cursor: pointer;
     color: white;
     background-color: #001d6e;
@@ -203,8 +196,6 @@ const CardGrid = styled.div`
   gap: 30px;
   padding: 0 6% 0 1%;
   margin-top: 3rem;
-
-  width: 90vw;
 `;
 
 const Link = styled(NavLink)`
