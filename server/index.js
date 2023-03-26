@@ -1,6 +1,7 @@
 "use strict";
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import {
   createNewOrder,
   getItems,
@@ -28,6 +29,7 @@ app.use(morgan("tiny"));
 app.use(express.static("./server/assets"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 // REST endpoints?
 app.get("/get-items", getItems);
