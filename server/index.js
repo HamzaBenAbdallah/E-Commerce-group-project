@@ -35,6 +35,9 @@ app.get("/products/:product_id", getProductDescription);
 app.post("/checkout", createNewOrder);
 app.get("/confirmed-purchased", getOrder);
 
+app.get("/", (req, res) =>
+  res.status(200).json("Welcome to the e-commerce API!")
+);
 app.get("/bacon", (req, res) => res.status(200).json("🥓"));
 
 app.listen(PORT, () => console.info(`Listening on port ${PORT}`));
