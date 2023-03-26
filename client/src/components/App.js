@@ -8,8 +8,6 @@ import ProductDescription from "../pages/ProductDescription";
 import Cart from "../pages/Cart";
 import Confirmation from "../pages/Confirmation";
 import Checkout from "../pages/Checkout";
-import React, { useContext } from "react";
-import { GlobalContext } from "../services/GlobalContext";
 
 function App() {
   return (

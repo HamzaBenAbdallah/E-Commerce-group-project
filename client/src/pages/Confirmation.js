@@ -9,8 +9,10 @@ const Confirmation = () => {
   const [subCost, setSubCost] = useState();
   const [loadingItems, setLoadingItems] = useState(false);
 
+  const server = process.env.REACT_APP_SERVER_URL;
+
   useEffect(() => {
-    fetch("/confirmed-purchased")
+    fetch(`${server}/confirmed-purchased`)
       .then((res) => res.json())
       .then((customer) => {
         setCustomerData(

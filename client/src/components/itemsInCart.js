@@ -3,6 +3,8 @@ import { NavLink } from "react-router-dom";
 import { GlobalContext } from "../services/GlobalContext";
 
 const ItemsInCart = ({ currentItem, id }) => {
+  const server = process.env.REACT_APP_SERVER_URL;
+
   const {
     cart,
     removeItemFromCart,
@@ -12,7 +14,7 @@ const ItemsInCart = ({ currentItem, id }) => {
   const [itemInformation, setItemInformation] = useState();
 
   useEffect(() => {
-    fetch(`/products/${id}`)
+    fetch(`${server}/products/${id}`)
       .then((response) => response.json())
       .then((data) => setItemInformation(data.data[0]));
   }, [cart, id]);

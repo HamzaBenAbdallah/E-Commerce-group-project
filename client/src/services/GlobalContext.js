@@ -17,6 +17,8 @@ export const GlobalProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingItems, setLoadingItems] = useState(false);
 
+  const server = process.env.REACT_APP_SERVER_URL;
+
   const addProductToCart = async (id, event, quantityToAdd) => {
     event.preventDefault();
     let itemsObject = { [id]: quantityToAdd };
@@ -64,7 +66,7 @@ export const GlobalProvider = ({ children }) => {
   };
   useEffect(() => {
     setIsLoading(true);
-    fetch("/get-items")
+    fetch(`${server}/get-items`)
       .then((res) => res.json())
       .then((itemData) => {
         setGetItems(itemData.items);
@@ -108,9 +110,11 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  /* eslint-disable */
   useEffect(() => {
     checkCartForEmptyItems();
   }, [cart]);
+  /* eslint-enable */
 
   return (
     <GlobalContext.Provider

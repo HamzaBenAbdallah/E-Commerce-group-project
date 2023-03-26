@@ -26,6 +26,8 @@ const Checkout = () => {
   const { getItems, cartTotal, setCart } = useContext(GlobalContext);
   const itemsList = Object.values(getItems);
 
+  const server = process.env.REACT_APP_SERVER_URL;
+
   const navigate = useNavigate();
 
   const shipping = 15;
@@ -74,7 +76,7 @@ const Checkout = () => {
       total,
     };
 
-    fetch("/checkout", {
+    fetch(`${server}/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

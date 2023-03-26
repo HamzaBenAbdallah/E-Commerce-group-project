@@ -13,8 +13,10 @@ const ProductDescription = () => {
   let { product_id } = useParams();
   product_id = parseInt(product_id);
 
+  const server = process.env.REACT_APP_SERVER_URL;
+
   useEffect(() => {
-    fetch(`/products/${product_id}`)
+    fetch(`${server}/products/${product_id}`)
       .then((response) => response.json())
 
       .then((data) => {
