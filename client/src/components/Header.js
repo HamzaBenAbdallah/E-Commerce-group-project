@@ -23,7 +23,7 @@ const Header = () => {
           <Title>No strings attached</Title>
         </Link>
         <Menu>
-          <Link reloadDocument to="/products">
+          <Link to="/products">
             <Item>Products</Item>
           </Link>
         </Menu>

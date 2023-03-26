@@ -18,11 +18,11 @@ function App() {
         <Main>
           <Routes>
             <Route exact path="/" element={<Front />} />
-            <Route path="/products" element={<Products />} />
-            {/* <Route
+            <Route exact path="/products" element={<Products />} />
+            <Route
               path="/products/:product_id"
               element={<ProductDescription />}
-            /> */}
+            />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmation" element={<Confirmation />} />
